@@ -1,0 +1,24 @@
+---
+antora:
+  name: modules
+  dir: www
+  modules:
+    - name: "01-introduction"
+      label: "Introduction"
+      solveButton: true
+    - name: "02-clientenrollment"
+      label: "Clientenrollment"
+      solveButton: true
+    - name: "03-usermanagement"
+      label: "Usermanagement"
+      solveButton: true
+    - name: "04-hostbasedaccesscontrol"
+      label: "Hostbasedaccesscontrol"
+      solveButton: true
+    - name: "05-sudo"
+      label: "Sudo"
+      solveButton: true
+
+tabs:
+  - name: ">_ terminal"
+    url: /wetty

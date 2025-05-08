@@ -1,0 +1,112 @@
+== Welcome to challenge 2
+
+=== Preparation
+
+To start our labs with the client, there is a little post deployment
+configuration that needs to be done. Now that our IdM Server is
+configured, we need to ensure that DNS resolution for our client is
+pointing to the DNS implementation on our IdM Server and not the cloud
+providers system. We provide a simple script for your convenience.
+
+Using the *IdM Client* tab, run the labsetup script:
+
+[source,bash]
+----
+/root/labsetup.sh
+----
+
+This sets up our client domain resolution and hostname and verifies that
+we can find idmserver1. The client installation is now able to use DNS
+discovery to find our IdM server.
+
+=== Exercise 2.1 - Configure the IdM client
+
+The IdM client software is not installed by default on a Red Hat
+Enterprise Linux system and is delivered via modular rpm packages.
+Depending on whether you are running Red Hat Enterprise Linux 8 or Red
+Hat Enterprise Linux 9, the command used to install the software is
+slightly different. In this lab, the software packages have been
+installed as part of the system build.
+
+Our server and client in this lab are running Red Hat Enterprise Linux
+9. If you would like to verify that the client package is installed, you
+can run the following command in the *IdM Client* terminal window:
+
+[source,bash]
+----
+yum -y install ipa-client
+----
+
+Now we will configure the client to use our IdM Server. During the setup
+you will be asked a number of questions, please accept the defaults,
+*unless outlined below*. Run the following command in the *IdM Client*
+terminal window.
+
+[source,bash]
+----
+ipa-client-install --mkhomedir
+----
+
+As with our server installation, we are using the mkhomedir argument to
+ensure that a home directory is created for users at first login. An
+alternative is to use automount rules integrated with IdM, if your
+environment allows.
+
+Our installation of the IdM server creates service (SRV) records in the
+DNS domain. Records like _kerberos-master._tcp point to our idmserver1
+system and allow applications to discover the IP address of the
+appropriate systems. We find that when we run our install program, DNS
+service discovery detects our IdM server. Next you are asked if you want
+to specify a list of time servers to use with the client.
+
+Type *no* or press Enter to accept the default.
+
+We will use the system default time servers as they are reachable from
+the lab. Time synchronization is important in a kerberos environment as
+tickets are time limited to address various attacks. If time
+synchronization is too far out between the IdM server and clients,
+authentication failures occur.
+
+Next, the discovered settings are displayed.
+
+Enter *yes* to continue to configure the system with the discovered
+values.
+
+The installer synchronizes the time with the configured services and
+displays the result. The installer then prompts you to enter the
+credentials of a user authorised to enrol hosts.
+
+Use *admin* with the password you configured previously for the IdM
+Server.
+
+[source,bash]
+----
+redhat2024
+----
+
+The client enrolment will now proceed without further input. The
+configuration should only takes a few seconds. As soon as a system is
+enrolled, all IdM services are available to the host and to
+authenticated and authorized users.
+
+== Exercise 2.2 - Verify the client installation
+
+Verify that your system has access to the realm by authenicating again
+as admin
+
+[source,bash]
+----
+kinit admin
+----
+
+No output is good news.
+
+[source,bash]
+----
+klist
+----
+
+You should see the kerberos principal information displayed.
+
+Now that we have successfully configured the server and a client. Let’s
+look at user management in more detail.
