@@ -1,22 +1,60 @@
 ---
 virtualmachines:
   - name: "idmserver1"
-    image: "rhel-9-4-05-27-24"
-    memory: "2G"
+    image: "rhel-10-0-07-09-25-3"
+    bootloader: efi
+    memory: "4G"
     cores: 1
     image_size: "40G"
+    packages:
+      - git
+      - cockpit
+      - tmux
     tags:
       - key: "AnsibleGroup"
         value: "bastions"
     networks:
       - default
+    services:
+      - name: cockpit
+        ports:
+          - port: 9090
+            protocol: TCP
+            targetPort: 9090
+            name: cockpit
+    routes:
+      - name: cockpit
+        host: cockpit
+        service: cockpit
+        targetPort: 9090
+        tls: true
+        tls_termination: Edge
   - name: "idmclient1"
-    image: "rhel-9-4-05-27-24"
-    memory: "2G"
+    image: "rhel-10-0-07-09-25-3"
+    bootloader: efi
+    memory: "4G"
     cores: 1
     image_size: "40G"
+    packages:
+      - git
+      - cockpit
+      - tmux
     tags:
       - key: "AnsibleGroup"
         value: "bastions"
     networks:
       - default
+    services:
+      - name: cockpit
+        ports:
+          - port: 9090
+            protocol: TCP
+            targetPort: 9090
+            name: cockpit
+    routes:
+      - name: cockpit
+        host: cockpit
+        service: cockpit
+        targetPort: 9090
+        tls: true
+        tls_termination: Edge
