@@ -1,16 +1,23 @@
 ---
 # By default egress traffic is not allowed, define below the ports allowed.
+# ssh
+# https
+# https -> cockpit
+
+ingress:
+  - ports:
+    - protocol: TCP
+      port: 22
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 9090
 egress:
   - ports:
-      - protocol: TCP
-        port: 443
-
-# The following lines are suggested based on Instruqt's allow_external_ingress fields:
-# idmserver1:
-#   - http
-#   - https
-#   - high-ports
-# idmclient1:
-#   - http
-#   - https
-#   - high-ports
+    - protocol: TCP
+      port: 22
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 9090
+  

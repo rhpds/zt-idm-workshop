@@ -1,8 +1,9 @@
 ---
 virtualmachines:
   - name: "idmserver1"
-    image: "rhel-9-4-05-27-24"
-    memory: "2G"
+    image: "rhel-9.6"
+    bootloader: "efi"
+    memory: "4G"
     cores: 1
     image_size: "40G"
     tags:
@@ -10,9 +11,57 @@ virtualmachines:
         value: "bastions"
     networks:
       - default
+    packages:
+      - vim
+      - bind-utils
+    services:
+      - name: ipa
+        ports:
+          - port: 443
+            protocol: TCP
+            targetPort: 443
+            name: ipa
+    routes:
+      - name: ipa
+        host: ipa
+        service: ipa
+        targetPort: 443
+        tls: true
+        tls_termination: edge
+
+  - name: "idmserver2"
+    image: "rhel-9.6"
+    bootloader: "efi"
+    memory: "4G"
+    cores: 1
+    image_size: "40G"
+    tags:
+      - key: "AnsibleGroup"
+        value: "bastions"
+    networks:
+      - default
+    packages:
+      - vim
+      - bind-utils
+    services:
+      - name: ipa
+        ports:
+          - port: 443
+            protocol: TCP
+            targetPort: 443
+            name: ipa
+    routes:
+      - name: ipa
+        host: ipa
+        service: ipa
+        targetPort: 443
+        tls: true
+        tls_termination: edge
+
   - name: "idmclient1"
-    image: "rhel-9-4-05-27-24"
-    memory: "2G"
+    image: "rhel-9.6"
+    bootloader: "efi"
+    memory: "4G"
     cores: 1
     image_size: "40G"
     tags:
@@ -20,3 +69,20 @@ virtualmachines:
         value: "bastions"
     networks:
       - default
+    packages:
+      - vim
+      - bind-utils
+    services:
+      - name: cockpit
+        ports:
+          - port: 9090
+            protocol: TCP
+            targetPort: 9090
+            name: cockpit
+    routes:
+      - name: cockpit
+        host: cockpit
+        service: cockpit
+        targetPort: 9090
+        tls: true
+        tls_termination: edge

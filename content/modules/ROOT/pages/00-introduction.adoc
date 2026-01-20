@@ -1,56 +1,16 @@
 == Welcome to the Identity Management Workshop
 
-=== IMPORTANT: Using this lab
-
-____
-This text is in a resizable frame. Some of the commands you will need
-are wider than the default area. Use your mouse to grab the resize bar
-that separates the text from the terminal window and resize the these
-contents for comfortable viewing.
-
-Some of the commands that you need to execute in the terminal window are
-provided to you for convenience. They are listed in a code formatted
-area. Hover over the right side of the area with your mouse to reveal
-the copy button. Click to copy all the text to the clipboard. See the
-example below.
-____
-
-[source,bash]
-----
-echo "I copied this text using the copy button here >>>"
-----
-
-____
-Expected output is from commands in the terminal window are displayed as
-code. These sections do not provide a copy button.
-____
-
-With that, let’s look at our environment.
-
 === Environment
 
 The lab environment will consist of the following systems:
 
 * 1 Red Hat Identity Management (IdM) server
-* 1 IdM client
+* 1 Red Hat Identity Management Replica
+* 2 IdM clients
 
-You are logged into the consoles with root access by the environment. A
-local user account has also been created that you can use:
-
-This user is a member of wheel and has sudo access.
-
-You can preform all of the activities in the labs using the root
-account. The above account has been provided should it become necessary.
-
-*To prepare for the lab, please execute the following command:*
-
-[source,bash]
-----
-/root/labsetup.sh
-----
-
-This command simply updates our local hosts file with the private ip of
-our cloud instance.
+You will access the lab systems through the terminal window and the Identity Management Web UI. 
+You will also have access to the RHEL Web UI for the clients where appropriate. 
+As you progress through the labs in this workshops, the required tabs will be displayed.
 
 === Exercise 1.1 - Install the IdM server
 
