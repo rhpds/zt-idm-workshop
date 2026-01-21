@@ -8,7 +8,6 @@ virtualmachines:
     image_size: "40G"
     packages:
       - git
-      - cockpit
       - tmux
     tags:
       - key: "AnsibleGroup"
@@ -16,19 +15,65 @@ virtualmachines:
     networks:
       - default
     services:
-      - name: cockpit
+      - name: ipa
         ports:
-          - port: 9090
+          - port: 443
             protocol: TCP
-            targetPort: 9090
-            name: cockpit
+            targetPort: 443
+            name: ipa
     routes:
-      - name: cockpit
-        host: cockpit
-        service: cockpit
-        targetPort: 9090
+      - name: ipa
+        host: idmserver1
+        service: ipa
+        targetPort: 443
         tls: true
         tls_termination: Edge
+    userdata: >-
+      #cloud-config
+      user: rhel
+      password: redhat123!
+      chpasswd: { expire: False }
+      runcmd:
+        - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
+        - systemctl reload sshd
+
+  - name: "idmserver2"
+    image: "rhel-10-0-07-09-25-3"
+    bootloader: efi
+    memory: "4G"
+    cores: 1
+    image_size: "40G"
+    packages:
+      - git
+      - tmux
+    tags:
+      - key: "AnsibleGroup"
+        value: "bastions"
+    networks:
+      - default
+    services:
+      - name: ipa
+        ports:
+          - port: 443
+            protocol: TCP
+            targetPort: 443
+            name: ipa
+    routes:
+      - name: ipa
+        host: idmserver2
+        service: ipa
+        targetPort: 443
+        tls: true
+        tls_termination: Edge
+    userdata: >-
+      #cloud-config
+      user: rhel
+      password: redhat123!
+      chpasswd: { expire: False }
+      runcmd:
+        - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
+        - systemctl reload sshd
+
   - name: "idmclient1"
     image: "rhel-10-0-07-09-25-3"
     bootloader: efi
@@ -53,8 +98,16 @@ virtualmachines:
             name: cockpit
     routes:
       - name: cockpit
-        host: cockpit
+        host: idmclient1
         service: cockpit
         targetPort: 9090
         tls: true
         tls_termination: Edge
+    userdata: >-
+      #cloud-config
+      user: rhel
+      password: redhat123!
+      chpasswd: { expire: False }
+      runcmd:
+        - echo "PasswordAuthentication yes" > /etc/ssh/sshd_config.d/50-cloud-init.conf
+        - systemctl reload sshd
