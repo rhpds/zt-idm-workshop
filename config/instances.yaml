@@ -81,3 +81,5 @@ virtualmachines:
         host: idmclient1
         service: cockpit
         targetPort: 9090
+        tls: true
+        tls_termination: Edge
