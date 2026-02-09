@@ -15,16 +15,16 @@ virtualmachines:
     networks:
       - default
     services:
-      - name: ipa
+      - name: idm1
         ports:
           - port: 443
             protocol: TCP
             targetPort: 443
-            name: ipa
+            name: idm1
     routes:
-      - name: ipa
+      - name: idm1
         host: idmserver1
-        service: ipa
+        service: idm1
         targetPort: 443
         tls: true
         tls_termination: Edge
@@ -52,16 +52,16 @@ virtualmachines:
     networks:
       - default
     services:
-      - name: ipa
+      - name: idm2
         ports:
           - port: 443
             protocol: TCP
             targetPort: 443
-            name: ipa
+            name: idm2
     routes:
-      - name: ipa
+      - name: idm2
         host: idmserver2
-        service: ipa
+        service: idm2
         targetPort: 443
         tls: true
         tls_termination: Edge
