@@ -26,8 +26,6 @@ virtualmachines:
         host: idmserver1
         service: idm1
         targetPort: 443
-        tls: true
-        tls_termination: Edge
 
   - name: "idmserver2"
     image: "rhel-10-0-07-09-25-3"
@@ -55,8 +53,6 @@ virtualmachines:
         host: idmserver2
         service: idm2
         targetPort: 443
-        tls: true
-        tls_termination: Edge
 
   - name: "idmclient1"
     image: "rhel-10-0-07-09-25-3"
@@ -85,5 +81,3 @@ virtualmachines:
         host: idmclient1
         service: cockpit
         targetPort: 9090
-        tls: true
-        tls_termination: Edge
