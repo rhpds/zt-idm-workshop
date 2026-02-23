@@ -1,6 +1,6 @@
 ---
 virtualmachines:
-  - name: "idmserver1"
+  - name: "idmprimary"
     image: "rhel-10-0-07-09-25-3"
     bootloader: efi
     memory: "4G"
@@ -23,11 +23,11 @@ virtualmachines:
             name: idm1
     routes:
       - name: idm1
-        host: idmserver1
+        host: idmprimary
         service: idm1
         targetPort: 443
 
-  - name: "idmserver2"
+  - name: "idmreplica"
     image: "rhel-10-0-07-09-25-3"
     bootloader: efi
     memory: "4G"
@@ -50,7 +50,7 @@ virtualmachines:
             name: idm2
     routes:
       - name: idm2
-        host: idmserver2
+        host: idmreplica
         service: idm2
         targetPort: 443
 
@@ -79,6 +79,36 @@ virtualmachines:
     routes:
       - name: cockpit
         host: idmclient1
+        service: cockpit
+        targetPort: 9090
+        tls: true
+        tls_termination: Edge
+
+  - name: "idmclient2"
+    image: "rhel-10-0-07-09-25-3"
+    bootloader: efi
+    memory: "4G"
+    cores: 1
+    image_size: "40G"
+    packages:
+      - git
+      - cockpit
+      - tmux
+    tags:
+      - key: "AnsibleGroup"
+        value: "bastions"
+    networks:
+      - default
+    services:
+      - name: cockpit
+        ports:
+          - port: 9090
+            protocol: TCP
+            targetPort: 9090
+            name: cockpit
+    routes:
+      - name: cockpit
+        host: idmclient2
         service: cockpit
         targetPort: 9090
         tls: true
