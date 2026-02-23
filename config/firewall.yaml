@@ -12,15 +12,15 @@ egress:
         port: 443
       - protocol: TCP
         port: 22
-#   - to:
-#       - podSelector:
-#           matchLabels:
-#             kubevirt.io: virt-launcher
-# ingress:
-#   - from:
-#       - podSelector:
-#           matchLabels:
-#             kubevirt.io: virt-launcher
+  - to:
+      - podSelector:
+          matchLabels:
+            kubevirt.io: virt-launcher
+ingress:
+  - from:
+      - podSelector:
+          matchLabels:
+            kubevirt.io: virt-launcher
 
 # The following lines are suggested based on Instruqt's allow_external_ingress fields:
 # idmserver1:
