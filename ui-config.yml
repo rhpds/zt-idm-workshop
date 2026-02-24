@@ -37,7 +37,7 @@ tabs:
       - 04-hostbasedaccesscontrol
       - 05-sudo
   - name: "Client1 Web Console"
-    url: https://idmclient1-${guid}.${domain}/
+    url: https://idmclient1-${guid}.${domain}:9090/
   - name: "IdM Web UI"
     url: https://idmprimary-${guid}.${domain}/
     modules: 
