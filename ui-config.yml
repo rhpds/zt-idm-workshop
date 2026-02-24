@@ -18,12 +18,12 @@ antora:
     - name: "05-sudo"
       label: "Sudo"
       solveButton: false
-    - name: "05-selinuxusermaps"
-      label: "Sudo"
+    - name: "06-selinuxusermaps"
+      label: "Selinuxusermaps"
       solveButton: false
 
 tabs:
-  - name: "IdM Primary terminal"
+  - name: "IdM Primary"
     url: /wetty_idmprimary/ssh/root
     modules: 
       - 01-introduction
@@ -31,7 +31,9 @@ tabs:
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
       - 05-sudo
-  - name: "IdM Client1 terminal"
+      - 06-selinuxusermaps
+
+  - name: "IdM Client1"
     url: /wetty_idmclient1/ssh/root
     modules: 
       - 01-introduction
@@ -39,12 +41,15 @@ tabs:
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
       - 05-sudo
+      - 06-selinuxusermaps
+
   - name: "IdM Web UI"
-    url: https://idmprimary-${guid}.${domain}/
+    url: https://idmprimary-${GUID}.${DOMAIN}/
     modules: 
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
       - 05-sudo
+      - 06-selinuxusermaps
 
 # tabs:
 #   - name: "Satellite Web UI"

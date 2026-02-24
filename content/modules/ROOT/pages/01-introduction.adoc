@@ -37,7 +37,9 @@ The lab environment will consist of the following systems:
 * 1 x Red Hat Identity Management (IdM) Replica server - idmreplica
 * 2 x IdM clients - idmclient1, idmclient2
 
-You are logged into the consoles with root access by the environment. 
+For module 1, we will only be working at the idmprimary system, however, you will see 2 tabs on the right side of the screen.
+One tab, is labelled for the idmprimary and one for idmclient1.
+You are logged into the consoles with root access by the environment.
 A local user account has also been created that you can use:
 
 .Command
@@ -51,8 +53,12 @@ This user is a member of wheel and has sudo access.
 
 You can preform all of the activities in the labs using the root account.
 The above account has been provided should it become necessary.
+Throughout the workshop we will create a variety of other users.
+The instructions will be clear as to what operations are to be performed using a specific login.
 
-*To prepare for the lab, please execute the following command:*
+=== Let's get started
+
+*To prepare for the lab, please select the 'IdM Primary' tab and execute the following command:*
 
 [source,bash]
 ----
@@ -64,18 +70,18 @@ This command simply updates our local hosts file with the private ip of our clou
 === Exercise 1.1 - Install the IdM server
 
 The IdM server binaries are provided in the ipa-server package. 
-The ipa-server package has been installed on the idmserver1 system within your environment during creation.
+The ipa-server package has been installed on the idmprimary system within your environment during provisioning.
 
 The configuration of the IdM server managed by an installer program.
 We add the *--no-host-dns* parameter to support our lab environment.
 In a production environment, to ensure proper DNS delegation, DNS forwarding, etc.. checking the host dns entry ensures that our configuration will function as expected. 
-The *–mkhomedir* option is used to ensure that PAM creates missing home directories for users when they login for the first time.
+The *--mkhomedir* option is used to ensure that PAM creates missing home directories for users when they login for the first time.
 IdM also supports automount for those use cases where oddjobd and automount use is authorized.
 
 During the installation of the IdM server you will be asked a number of questions.
 Please accept the defaults *unless outlined below*.
 
-Using the *IdM Server* tab, start by running the installation command:
+Using the *IdM Primary* tab, start by running the installation command:
 
 [source,bash]
 ----
@@ -103,7 +109,7 @@ Accept the default by pressing enter after each of the following questions.
 
 You will need to provide a password for the *LDAP Directory Manager* and for the *IdM admin* account.
 It requires a minimum of 8 characters. 
-For both, please use:
+*For both, please use:*
 
 [source,bash]
 ----
@@ -111,15 +117,12 @@ redhat2026
 ----
 
 There are several more questions related to the DNS configuration, NETBIOS name, and time servers.
+*Accept the default or type yes.*
 
-Accept the default or type yes.
-
-Accept the default found by the search of resolv.conf by pressing Enter or typing yes.
-
+Accept the default to look for DNS forwarder configuration found by the search of resolv.conf by pressing *Enter* or typing *yes*.
 Accept the default or type yes. You should get a message stating that it already exists.
 
 Next, you will see a message similar to the following asking for the NETBIOS name of the *IPA Domain* (not the IPA server):
-
 Accept the default or type yes.
 
 Time synchronization is already configured by the environment. 
@@ -131,7 +134,8 @@ This is the "`Are you sure?`" moment. You need to type in *yes* here.
 
 The installation should take about 5-10 minutes. Follow the remainder of the installation process and examine the output.
 
-The installation will: 
+The installation will:
+
 * Configure a stand-alone CA (dogtag) for certificate management 
 * Configure the NTP client (chronyd)
 * Create and configure an instance of Directory Server 
