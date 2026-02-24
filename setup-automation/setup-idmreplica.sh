@@ -9,6 +9,8 @@ EOF
 
 chmod 400 /root/.ssh/config
 
+dnf -y update
+
 echo "Configure the script variables" >> /root/post-run.log
 # naming based on deployment names e.g. idmreplica.lab.sandbox-mpkfh-zt-rhelbu.svc.cluster.local
 export IDM_PRIMARY_NAME=idmprimary.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
