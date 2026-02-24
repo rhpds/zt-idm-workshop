@@ -22,54 +22,54 @@ virtualmachines:
             protocol: TCP
             targetPort: 443
             name: idmprimary_webui
-      - name: idmp_ldap_389_tcp
-        ports:
-          - port: 389
-            protocol: TCP
-            targetPort: 389
-            name: idmp_ldap_389_tcp
-      - name: idmp_ldaps_636_tcp
-        ports:
-          - port: 636
-            protocol: TCP
-            targetPort: 636
-            name: idmp_ldap_636_tcp
-      - name: idmp_kerberos_88_tcp
-        ports:
-          - port: 88
-            protocol: TCP
-            targetPort: 88
-            name: idmp_kerberos_88_tcp
-      - name: idmp_kerberos_464_tcp
-        ports:
-          - port: 464
-            protocol: TCP
-            targetPort: 464
-            name: idmp_kerberos_464_tcp
-      - name: idmp_kerberos_88_udp
-        ports:
-          - port: 88
-            protocol: UDP
-            targetPort: 88
-            name: idmp_kerberos_88_udp
-      - name: idmp_kerberos_464_udp
-        ports:
-          - port: 464
-            protocol: UDP
-            targetPort: 464
-            name: idmp_kerberos_464_udp
-      - name: idmp_dns_53_tcp
-        ports:
-          - port: 53
-            protocol: TCP``
-            targetPort: 53
-            name: idmp_dns_53_tcp
-      - name: idmp_dns_53_udp
-        ports:
-          - port: 53
-            protocol: UDP
-            targetPort: 53
-            name: idmp_dns_53_udp
+      # - name: idmp_ldap_389_tcp
+      #   ports:
+      #     - port: 389
+      #       protocol: TCP
+      #       targetPort: 389
+      #       name: idmp_ldap_389_tcp
+      # - name: idmp_ldaps_636_tcp
+      #   ports:
+      #     - port: 636
+      #       protocol: TCP
+      #       targetPort: 636
+      #       name: idmp_ldap_636_tcp
+      # - name: idmp_kerberos_88_tcp
+      #   ports:
+      #     - port: 88
+      #       protocol: TCP
+      #       targetPort: 88
+      #       name: idmp_kerberos_88_tcp
+      # - name: idmp_kerberos_464_tcp
+      #   ports:
+      #     - port: 464
+      #       protocol: TCP
+      #       targetPort: 464
+      #       name: idmp_kerberos_464_tcp
+      # - name: idmp_kerberos_88_udp
+      #   ports:
+      #     - port: 88
+      #       protocol: UDP
+      #       targetPort: 88
+      #       name: idmp_kerberos_88_udp
+      # - name: idmp_kerberos_464_udp
+      #   ports:
+      #     - port: 464
+      #       protocol: UDP
+      #       targetPort: 464
+      #       name: idmp_kerberos_464_udp
+      # - name: idmp_dns_53_tcp
+      #   ports:
+      #     - port: 53
+      #       protocol: TCP``
+      #       targetPort: 53
+      #       name: idmp_dns_53_tcp
+      # - name: idmp_dns_53_udp
+      #   ports:
+      #     - port: 53
+      #       protocol: UDP
+      #       targetPort: 53
+      #       name: idmp_dns_53_udp
 
 
     routes:
@@ -77,38 +77,38 @@ virtualmachines:
         host: idmprimary
         service: idmprimary_webui
         targetPort: 443
-      - name: idmp_ldap_389_tcp
-        host: idmprimary
-        service: idmp_ldap_389_tcp
-        targetPort: 389
-      - name: idmp_ldaps_636_tcp
-        host: idmprimary
-        service: idmp_ldaps_636_tcp
-        targetPort: 636
-      - name: idmp_keberos_88_tcp
-        host: idmprimary
-        service: idmp_keberos_88_tcp
-        targetPort: 88
-      - name: idmp_keberos_464_tcp
-        host: idmprimary
-        service: idmp_keberos_464_tcp
-        targetPort: 464
-      - name: idmp_keberos_88_udp
-        host: idmprimary
-        service: idmp_keberos_88_udp
-        targetPort: 88
-      - name: idmp_keberos_464_udp
-        host: idmprimary
-        service: idmp_keberos_464_udp
-        targetPort: 464
-      - name: idmp_dns_53_tcp
-        host: idmprimary
-        service: idmp_dns_53_tcp
-        targetPort: 53
-      - name: idmp_dns_53_udp
-        host: idmprimary
-        service: idmp_dns_53_udp
-        targetPort: 53
+      # - name: idmp_ldap_389_tcp
+      #   host: idmprimary
+      #   service: idmp_ldap_389_tcp
+      #   targetPort: 389
+      # - name: idmp_ldaps_636_tcp
+      #   host: idmprimary
+      #   service: idmp_ldaps_636_tcp
+      #   targetPort: 636
+      # - name: idmp_keberos_88_tcp
+      #   host: idmprimary
+      #   service: idmp_keberos_88_tcp
+      #   targetPort: 88
+      # - name: idmp_keberos_464_tcp
+      #   host: idmprimary
+      #   service: idmp_keberos_464_tcp
+      #   targetPort: 464
+      # - name: idmp_keberos_88_udp
+      #   host: idmprimary
+      #   service: idmp_keberos_88_udp
+      #   targetPort: 88
+      # - name: idmp_keberos_464_udp
+      #   host: idmprimary
+      #   service: idmp_keberos_464_udp
+      #   targetPort: 464
+      # - name: idmp_dns_53_tcp
+      #   host: idmprimary
+      #   service: idmp_dns_53_tcp
+      #   targetPort: 53
+      # - name: idmp_dns_53_udp
+      #   host: idmprimary
+      #   service: idmp_dns_53_udp
+      #   targetPort: 53
 
   - name: "idmreplica"
 #    image: "rhel-10-0-07-09-25-3"
