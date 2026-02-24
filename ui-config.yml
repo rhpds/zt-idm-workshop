@@ -18,6 +18,9 @@ antora:
     - name: "05-sudo"
       label: "Sudo"
       solveButton: false
+    - name: "05-selinuxusermaps"
+      label: "Sudo"
+      solveButton: false
 
 tabs:
   - name: "IdM Primary terminal"
@@ -36,8 +39,6 @@ tabs:
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
       - 05-sudo
-  - name: "Client1 Web Console"
-    url: https://idmclient1-${guid}.${domain}:9090/
   - name: "IdM Web UI"
     url: https://idmprimary-${guid}.${domain}/
     modules: 
