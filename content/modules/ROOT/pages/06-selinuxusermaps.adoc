@@ -1,6 +1,5 @@
 == Welcome to challenge 6
 
-[[selinux-user-maps-1]]
 === SELinux User Maps
 
 SELinux is a mandatory access controls mechanism for Linux, providing more powerful and flexible access control than traditional Unix permissions.

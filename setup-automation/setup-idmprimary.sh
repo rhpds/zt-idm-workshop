@@ -32,6 +32,12 @@ firewall-cmd --permanent --add-service=freeipa-replication
 firewall-cmd --permanent --add-service=freeipa-trust
 firewall-cmd --reload
 
+# # add a time server as they aren't provided by default
+# # they don't let us out...
+# echo "server    time.chu.nrc.ca         iburst" >> /etc/chrony.conf
+# echo "server    0.pool.utoronto.ca      iburst" >> /etc/chrony.conf
+# echo "server    1.pool.utoronto.ca      iburst" >> /etc/chrony.conf
+
 echo "Install the ipa-server packages" >> /root/post-run.log
 dnf -y install bind-utils
 dnf -y install ipa-server ipa-server-dns ipa-healthcheck
