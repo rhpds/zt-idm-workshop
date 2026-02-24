@@ -38,16 +38,16 @@ dnf -y install ipa-server ipa-server-dns ipa-healthcheck
 echo "Create the lab setup scripts" >> /root/post-run.log
 tee -a /root/labsetup.sh << EOF
 #!/bin/bash
-REPLICAIPADDRESS=\$(nslookup $IDM_REPLICA_NAME | awk '/^Address: / { print \$2 }')
+PRIMARYIPADDRESS=\$(nslookup $IDM_PRIMARY_NAME | awk '/^Address: / { print \$2 }')
 MYIPADDRESS=\$(hostname --all-ip-addresses)
-echo "\$MYIPADDRESS $IDM_PRIMARY_NAME" >> /etc/hosts
-echo "\$REPLICAIPADDRESS $IDM_REPLICA_NAME" >> /etc/hosts
+echo "\$PRIMARYIPADDRESS $IDM_PRIMARY_NAME" >> /etc/hosts
+echo "\$MYIPADDRESS $IDM_REPLICA_NAME" >> /etc/hosts
 nmcli conn mod 'Wired connection 1' ipv6.method disabled
 nmcli conn up 'Wired connection 1'
 sleep 2
-hostnamectl set-hostname $IDM_PRIMARY_NAME
+hostnamectl set-hostname $IDM_REPLICA_NAME
 hostnamectl
-ping -c 3 $IDM_PRIMARY_NAME
+ping -c 3 $IDM_REPLICA_NAME
 EOF
 
 chmod +x /root/labsetup.sh
