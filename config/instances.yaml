@@ -2,7 +2,7 @@
 virtualmachines:
   - name: "idmprimary"
 #    image: "rhel-10-0-07-09-25-3"
-    image: "rhel-9.6"
+    image: "rhel-9.7"
     bootloader: efi
     memory: "4G"
     cores: 1
@@ -61,7 +61,7 @@ virtualmachines:
       - name: idmp-dns-53-tcp
         ports:
           - port: 53
-            protocol: TCP``
+            protocol: TCP
             targetPort: 53
             name: idmp-dns-53-tcp
       - name: idmp-dns-53-udp
@@ -112,7 +112,7 @@ virtualmachines:
 
   - name: "idmreplica"
 #    image: "rhel-10-0-07-09-25-3"
-    image: "rhel-9.6"
+    image: "rhel-9.7"
     bootloader: efi
     memory: "4G"
     cores: 1
