@@ -9,6 +9,16 @@ EOF
 
 chmod 400 /root/.ssh/config
 
+echo "Configure the script variables" >> /root/post-run.log
+# naming based on deployment names e.g. idmreplica.lab.sandbox-mpkfh-zt-rhelbu.svc.cluster.local
+export IDM_PRIMARY_NAME=idmprimary.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
+export IDM_REPLICA_NAME=idmreplica.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
+export IDM_CLIENT1_NAME=idmclient1.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
+export IDM_CLIENT2_NAME=idmclient2.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
+export SUBDOMAIN=lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
+export REALM=${SUBDOMAIN^^}
+export NETBIOS=${GUID^^}
+
 # rhel user is already part of wheel
 echo "enable bash completion in the root's instruqt shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
@@ -21,15 +31,6 @@ firewall-cmd --permanent --add-service=freeipa-ldaps
 firewall-cmd --permanent --add-service=freeipa-replication
 firewall-cmd --permanent --add-service=freeipa-trust
 firewall-cmd --reload
-
-echo "Configure the script variables" >> /root/post-run.log
-export IDM_PRIMARY_NAME=idmprimary.${GUID}.${DOMAIN}
-export IDM_REPLICA_NAME=idmreplica.${GUID}.${DOMAIN}
-export IDM_CLIENT1_NAME=idmclient1.${GUID}.${DOMAIN}
-export IDM_CLIENT2_NAME=idmclient2.${GUID}.${DOMAIN}
-export SUBDOMAIN=${GUID}.${DOMAIN}
-export REALM=${SUBDOMAIN^^}
-export NETBIOS=${GUID^^}
 
 echo "Install the ipa-server packages" >> /root/post-run.log
 dnf -y install bind-utils
