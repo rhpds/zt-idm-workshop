@@ -21,7 +21,7 @@ export SUBDOMAIN=lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
 
 # Enable cockpit functionality in showroom.
 echo "[WebService]" > /etc/cockpit/cockpit.conf
-echo "Origins = https://${IDM_CLIENT2_NAME}" >> /etc/cockpit/cockpit.conf
+echo "Origins = https://cockpit-${GUID}.${DOMAIN}" >> /etc/cockpit/cockpit.conf
 echo "AllowUnencrypted = true" >> /etc/cockpit/cockpit.conf
 systemctl enable --now cockpit.socket
 
