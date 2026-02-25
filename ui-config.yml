@@ -50,6 +50,9 @@ tabs:
       - 04-hostbasedaccesscontrol
       - 05-sudo
       - 06-selinuxusermaps
+  
+  - name: "RHEL Web Console"
+    url: https://idmclient1-${guid}.${domain}/
 
 # tabs:
 #   - name: "Satellite Web UI"
