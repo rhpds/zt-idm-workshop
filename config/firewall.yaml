@@ -17,6 +17,9 @@ egress:
           matchLabels:
             kubevirt.io: virt-launcher
 ingress:
+  - ports:
+      - protocol: TCP
+        port: 9090
   - from:
       - podSelector:
           matchLabels:
