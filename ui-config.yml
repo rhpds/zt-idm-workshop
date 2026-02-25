@@ -44,7 +44,7 @@ tabs:
       - 06-selinuxusermaps
 
   - name: "IdM Web UI"
-    url: https://idmprimary-${GUID}.${DOMAIN}/
+    url: https://idmprimary-${guid}.${domain}/
     modules: 
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
