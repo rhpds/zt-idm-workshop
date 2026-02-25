@@ -49,7 +49,6 @@ tabs:
 
   - name: "IdM Web UI"
     url: https://idm-webui-${guid}.${domain}/
-    external: true
 #    modules: 
 #      - 03-usermanagement
 #      - 04-hostbasedaccesscontrol
