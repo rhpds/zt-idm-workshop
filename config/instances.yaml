@@ -146,8 +146,6 @@ virtualmachines:
     cores: 1
     image_size: "40G"
     packages:
-      - git
-      - cockpit
       - tmux
     tags:
       - key: "AnsibleGroup"
@@ -163,7 +161,7 @@ virtualmachines:
             name: cockpit
     routes:
       - name: cockpit
-        host: idmclient1
+        host: cockpit
         service: cockpit
         targetPort: 9090
         tls: true
@@ -178,7 +176,6 @@ virtualmachines:
     image_size: "40G"
     packages:
       - git
-      - cockpit
       - tmux
     tags:
       - key: "AnsibleGroup"
