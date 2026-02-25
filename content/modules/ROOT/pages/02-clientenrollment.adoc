@@ -34,7 +34,7 @@ can run the following command in the *IdM Client* terminal window:
 
 [source,bash]
 ----
-yum -y install ipa-client
+dnf -y install ipa-client
 ----
 
 Now we will configure the client to use our IdM Server. During the setup

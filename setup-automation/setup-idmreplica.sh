@@ -35,7 +35,6 @@ firewall-cmd --permanent --add-service=freeipa-trust
 firewall-cmd --reload
 
 echo "Install the ipa-server packages" >> /root/post-run.log
-dnf -y install bind-utils
 dnf -y install ipa-server ipa-server-dns ipa-healthcheck
 
 echo "Create the lab setup scripts" >> /root/post-run.log

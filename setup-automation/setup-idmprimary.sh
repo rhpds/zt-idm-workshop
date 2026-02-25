@@ -41,7 +41,6 @@ firewall-cmd --reload
 # echo "server    1.pool.utoronto.ca      iburst" >> /etc/chrony.conf
 
 echo "Install the ipa-server packages" >> /root/post-run.log
-dnf -y install bind-utils
 dnf -y install ipa-server ipa-server-dns ipa-healthcheck
 
 echo "Create the lab setup scripts" >> /root/post-run.log
