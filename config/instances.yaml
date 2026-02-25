@@ -16,17 +16,17 @@ virtualmachines:
     networks:
       - default
     services:
-      - name: idmprimary-webui
+      - name: idm-webui
         ports:
           - port: 443
             protocol: TCP
             targetPort: 443
-            name: idmprimary-webui
+            name: idm-webui
 
     routes:
-      - name: idmprimary-webui
-        host: idmprimary
-        service: idmprimary-webui
+      - name: idm-webui
+        host: idm-webui
+        service: idm-webui
         targetPort: 443
         tls: true
         tls_termination: reencrypt

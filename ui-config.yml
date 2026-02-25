@@ -48,12 +48,13 @@ tabs:
 # remember you are not dealing with hostnames but rather OCP services and routes
 
   - name: "IdM Web UI"
-    url: https://idmprimary-${guid}.${domain}/
-    modules: 
-      - 03-usermanagement
-      - 04-hostbasedaccesscontrol
-      - 05-sudo
-      - 06-selinuxusermaps
+    url: https://idm-webui-${guid}.${domain}/
+    external: true
+#    modules: 
+#      - 03-usermanagement
+#      - 04-hostbasedaccesscontrol
+#      - 05-sudo
+#      - 06-selinuxusermaps
   
   - name: "RHEL Web Console"
     url: https://cockpit-${guid}.${domain}/
