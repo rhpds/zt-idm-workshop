@@ -1,7 +1,7 @@
-== Welcome to challenge 3
+== Welcome to Module 3
 
-This unit introduces the IdM web interface and the *ipa* CLI program. We
-will perform some simple administrative tasks using these tools:
+This unit introduces the IdM web interface and the *ipa* CLI program.
+We will perform some simple administrative tasks using these tools:
 
 * adding groups
 * adding users and
@@ -9,65 +9,52 @@ will perform some simple administrative tasks using these tools:
 
 === The IdM Web UI
 
-Use the *IdM Web UI* tab. This should direct you to the web UI for
-_your_ lab instance. You will get a TLS *untrusted issuer warning* which
-you should dismiss accordingly in your browser.
+Use the *IdM Web UI* tab. 
+This should direct you to the web UI for _your_ lab instance.
+You will get a TLS *untrusted issuer warning* which you should dismiss accordingly in your browser.
 
 ____
 *_NOTE:_* The Web UI *must* open in a separate browser tab or window.
-For security reasons the Web UI does not allow itself to be opened in an
-embedded iframe.
+For security reasons the Web UI does not allow itself to be opened in an embedded iframe.
 ____
 
-Log in as *admin* with the password of *redhat2024* (or the password you
-used in previous exercises).
+Log in as *admin* with the password of *redhat2026* (or the password you used in previous exercises).
 
-Welcome to the Identity Management Web UI. Management activities can be
-performed here, or via the *ipa* CLI program. The web UI should be very
-intuitive.
+Welcome to the Identity Management Web UI. 
+Management activities can be performed here, or via the *ipa* CLI program.
+The web UI should be very intuitive.
 
 === Exercise 3.1 - Using the Web UI
 
 Use the Web UI to perform the following actions:
 
-[arabic]
-. Add a _User_ with the username *alice* with an initial password of
-*test123*.
-. Ensure that a _User Group_ for system administrators named *sysadmins*
-exists. Create it if necessary.
-. Add *alice* to the *sysadmins* user group.
-. Add a new _User Group_ for developers named *developers* with a
-description of *Application Developers* and accept the default settings.
-. Verify that the default *admin* user is a member of the *admins* user
-group.
+* Add a _User_ with the username *alice* with an initial password of *test123*.
+* Ensure that a _User Group_ for system administrators named *sysadmins* exists. Create it if necessary.
+* Add *alice* to the *sysadmins* user group.
+* Add a new _User Group_ for developers named *developers* with a description of *Application Developers* and accept the default settings.
+* Verify that the default *admin* user is a member of the *admins* user group.
 
 Reach out to your workshop instructor if you get stuck.
 
-Note that we can create users immediately, or we can *stage* them to be
-activated at a later date. Staging is a standard practice in most
-environments as part of the on-boarding process for newly hired
-employees. Staged users have a UID of -1. Activating a staged user moves
-their login in the UI to the Active users category.
+Note that we can create users immediately, or we can *stage* them to be activated at a later date.
+Staging is a standard practice in most environments as part of the on-boarding process for newly hired employees.
+Staged users have a UID of -1. 
+Activating a staged user moves their login in the UI to the Active users category.
 
-When you delete a user, you have the option to delete it completely or
-*preserve* the user that has been removed from service. Preserving the
-user is ideal for accounts that have be created for temporary activities
-like consulting engagements, etc. They can be restore or re-stage the
-user if, for example, the user will resume working for the organization.
+When you delete a user, you have the option to delete it completely or *preserve* the user that has been removed from service.
+Preserving the user is ideal for accounts that have be created for temporary activities like consulting engagements, etc.
+They can be restore or re-stage the user if, for example, the user will resume working for the organization.
+If you have time during this exercise come back to this and experiment with staging, activating, preserving, reactivating, restaging and deleting a user.
 
-If you have time during this exercise come back to this and experiment
-with staging, activating, preserving, reactivating, restaging and
-deleting a user.
-
-We can create a variety of groups as well, in our exercise, we are
-creating a user group. We can create *host groups* to apply policy more
-easily across servers. Legacy Netgroups are supported if necessary. We
-will see a lot more about host groups in later exercises.
+We can create a variety of groups as well.
+In our exercise we are creating a user group.
+We can create *host groups* to apply policy more easily across servers.
+Legacy Netgroups are supported if necessary.
+We will see a lot more about host groups in later exercises.
 
 === Exercise 3.2 - Discovering the ipa CLI
 
-For this part of the challenge, use one of the terminal windows IdM
-Server or IdM Client.
+For this part of the challenge, use one of the terminal windows IdM Server or IdM Client.
 
 Make sure you have a Kerberos ticket for *admin* (reminder: *kinit
 admin*). To perform many of the tasks that the *ipa* command is capable

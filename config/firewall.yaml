@@ -17,17 +17,12 @@ egress:
           matchLabels:
             kubevirt.io: virt-launcher
 ingress:
+  - ports:
+      - protocol: TCP
+        port: 9090
+      - protocol: TCP
+        port: 443
   - from:
       - podSelector:
           matchLabels:
             kubevirt.io: virt-launcher
-
-# The following lines are suggested based on Instruqt's allow_external_ingress fields:
-# idmserver1:
-#   - http
-#   - https
-#   - high-ports
-# idmclient1:
-#   - http
-#   - https
-#   - high-ports

@@ -25,7 +25,7 @@ echo "Origins = https://cockpit-${GUID}.${DOMAIN}" >> /etc/cockpit/cockpit.conf
 echo "AllowUnencrypted = true" >> /etc/cockpit/cockpit.conf
 systemctl enable --now cockpit.socket
 
-echo "enable bash completion in the root's instruqt shell" >> /root/post-run.log
+echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
 echo "Configure the firewall for httpd" >> /root/post-run.log

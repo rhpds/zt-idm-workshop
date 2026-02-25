@@ -1,8 +1,9 @@
 == Welcome to the Identity Management Workshop
 
-=== IMPORTANT: Using this lab
+=== Module 1: Introduction
 
-____
+*IMPORTANT: Using this lab*
+
 This text is in a resizable frame. Some of the commands you will need are wider than the default area.
 Use your mouse to grab the resize bar that separates the text from the terminal window and resize the these contents for comfortable viewing.
 
@@ -15,21 +16,17 @@ When possible, try to type and execute the code yourself.
 It helps with learning.
 If you are having trouble, by all means, click away!
 See the example below.
-____
 
 [source,bash]
 ----
 echo "I copied this text using the copy button here >>>"
 ----
 
-____
 Expected output from commands in the terminal window are also displayed as code.
-These sections do not provide a copy button.
-____
 
 With that, let’s look at our environment.
 
-=== Environment
+==== Environment
 
 The lab environment will consist of the following systems:
 
@@ -37,12 +34,18 @@ The lab environment will consist of the following systems:
 * 1 x Red Hat Identity Management (IdM) Replica server - idmreplica
 * 2 x IdM clients - idmclient1, idmclient2
 
-For module 1, we will only be working at the idmprimary system, however, you will see 2 tabs on the right side of the screen.
+For most purposes, an IdM Primary server and an IdM Replica server are identical, the only difference being the order of installation. 
+In more sophisticated installations, we can configure servers to perform different roles to streamline Identity Management processing and operational workflow.
+For our first environment, the will be identical to support full redundancy of services as we have only 2 systems. 
+Identity Management environments can support as many as 64 replicas in a mesh like configuration. 
+Services may be distributed to optimize replication 
+
+For module 1, we will only be working at the idmprimary system.
+There are additional tabs on the right side of the screen to allow you additional interaction if necessary.
 One tab, is labelled for the idmprimary and one for idmclient1.
 You are logged into the consoles with root access by the environment.
 A local user account has also been created that you can use:
 
-.Command
 [source,bash,subs="+macros,+attributes",role=execute]
 ----
 username: rhel
@@ -56,7 +59,7 @@ The above account has been provided should it become necessary.
 Throughout the workshop we will create a variety of other users.
 The instructions will be clear as to what operations are to be performed using a specific login.
 
-=== Let's get started
+==== Let's get started
 
 *To prepare for the lab, please select the 'IdM Primary' tab and execute the following command:*
 
@@ -128,6 +131,7 @@ Do you want to configure DNS forwarders? [yes]:
 ----
 
 It will come back with the entry from resolv.conf. Accept the default or type yes. 
+
 ----
 Do you want to configure these servers as DNS forwarders? [yes]:
 ----
@@ -190,8 +194,7 @@ Running list-services, you should see a list similar to the following:
 firewall-cmd --list-services
 ----
 
-To investigate what is controlled by each service listing, run a command
-similar to the following:
+To investigate what is controlled by each service listing, run a command similar to the following:
 
 [source,bash]
 ----
@@ -214,9 +217,8 @@ Verify that you can authenticate with the new IdM realm using the default admin 
 kinit admin
 ----
 
-____
+
 NOTE: you can omit the realm name as it will be setup as a default in /etc/krb5.conf If you wish, you can investigate these settings by reviewing the file. Do not make changes.
-____
 
 Run klist to verify your authenitication token.
 

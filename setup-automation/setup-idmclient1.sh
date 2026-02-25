@@ -20,12 +20,12 @@ export IDM_CLIENT2_NAME=idmclient2.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.loc
 export SUBDOMAIN=lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
 
 # Enable cockpit functionality in showroom.
-# echo "[WebService]" > /etc/cockpit/cockpit.conf
-# echo "Origins = https://cockpit-${GUID}.${DOMAIN}" >> /etc/cockpit/cockpit.conf
-# echo "AllowUnencrypted = true" >> /etc/cockpit/cockpit.conf
-# systemctl enable --now cockpit.socket
+echo "[WebService]" > /etc/cockpit/cockpit.conf
+echo "Origins = https://cockpit-${GUID}.${DOMAIN}" >> /etc/cockpit/cockpit.conf
+echo "AllowUnencrypted = true" >> /etc/cockpit/cockpit.conf
+systemctl enable --now cockpit.socket
 
-echo "enable bash completion in the root's instruqt shell" >> /root/post-run.log
+echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
 echo "Configure the firewall for httpd" >> /root/post-run.log

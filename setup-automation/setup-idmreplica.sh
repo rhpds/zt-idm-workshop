@@ -22,7 +22,7 @@ export REALM=${SUBDOMAIN^^}
 export NETBIOS=${GUID^^}
 
 # rhel user is already part of wheel
-echo "enable bash completion in the root's instruqt shell" >> /root/post-run.log
+echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
 echo "Configure the firewall for IdM Server" >> /root/post-run.log
