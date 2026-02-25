@@ -43,8 +43,12 @@ tabs:
       - 05-sudo
       - 06-selinuxusermaps
 
+# The url line uses the name of the *service* entry from the instance.yaml file
+# NOT the hostname/name of the system the name of the server
+# remember you are not dealing with hostnames but rather OCP services and routes
+
   - name: "IdM Web UI"
-    url: https://idmprimary-${guid}.${domain}/
+    url: https://idmprimary-webui-${guid}.${domain}/
     modules: 
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
@@ -52,14 +56,4 @@ tabs:
       - 06-selinuxusermaps
   
   - name: "RHEL Web Console"
-    url: https://idmclient1-${guid}.${domain}/
-
-# tabs:
-#   - name: "Satellite Web UI"
-#     url: https://satellite-${guid}.${domain}/
-#   - name: "satellite terminal"
-#     url: /wetty_satellite/ssh/root
-#   - name: "rhel-${guid}-1 terminal"
-#     url: /wetty_rhel-${guid}-1
-#   - name: "rhel-${guid}-2 terminal"
-#     url: /wetty_rhel-${guid}-2/ssh/root
+    url: https://cockpit-${guid}.${domain}/
