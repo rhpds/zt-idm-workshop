@@ -1,8 +1,8 @@
 ---
 virtualmachines:
   - name: "idmprimary"
-#    image: "rhel-10-0-07-09-25-3"
-    image: "rhel-9.7"
+    image: "rhel-10-0-07-09-25-3"
+#    image: "rhel-9.7"
     bootloader: efi
     memory: "4G"
     cores: 1
@@ -72,8 +72,8 @@ virtualmachines:
           -----END CERTIFICATE-----
 
   - name: "idmreplica"
-#    image: "rhel-10-0-07-09-25-3"
-    image: "rhel-9.7"
+    image: "rhel-10-0-07-09-25-3"
+#    image: "rhel-9.7"
     bootloader: efi
     memory: "4G"
     cores: 1
@@ -100,8 +100,8 @@ virtualmachines:
         targetPort: 443
 
   - name: "idmclient1"
-#    image: "rhel-10-0-07-09-25-3"
-    image: "rhel-9.7"
+    image: "rhel-10-0-07-09-25-3"
+#    image: "rhel-9.7"
     bootloader: efi
     memory: "4G"
     cores: 1
@@ -115,8 +115,8 @@ virtualmachines:
       - default
 
   - name: "idmclient2"
-#    image: "rhel-10-0-07-09-25-3"
-    image: "rhel-9.7"
+    image: "rhel-10-0-07-09-25-3"
+#    image: "rhel-9.7"
     bootloader: efi
     memory: "4G"
     cores: 1
