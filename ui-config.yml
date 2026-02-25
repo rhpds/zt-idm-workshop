@@ -48,7 +48,7 @@ tabs:
 # remember you are not dealing with hostnames but rather OCP services and routes
 
   - name: "IdM Web UI"
-    url: https://idmprimary-webui-${guid}.${domain}/
+    url: https://idmprimary-${guid}.${domain}/
     modules: 
       - 03-usermanagement
       - 04-hostbasedaccesscontrol
