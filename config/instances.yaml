@@ -25,7 +25,7 @@ virtualmachines:
 
     routes:
       - name: idm-webui
-        host: idmprimary.lab.sandbox-${guid}-zt-rhelbu.svc.cluster.local
+        host: idmprimary
         service: idm-webui
         targetPort: 443
         tls: true
