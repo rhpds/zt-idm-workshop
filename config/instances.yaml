@@ -19,16 +19,16 @@ virtualmachines:
     services:
       - name: idm-webui
         ports:
-          - port: 443
+          - port: 80
             protocol: TCP
-            targetPort: 443
+            targetPort: 80
             name: idm-webui
 
     routes:
       - name: idm-webui
         host: idm-webui
         service: idm-webui
-        targetPort: 443
+        targetPort: 80
         tls: true
         tls_termination: edge
 
