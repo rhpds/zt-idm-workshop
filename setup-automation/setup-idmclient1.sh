@@ -12,12 +12,6 @@ chmod 400 /root/.ssh/config
 dnf -y update
 
 echo "Configure the script variables" >> /root/post-run.log
-# naming based on deployment names e.g. idmreplica.lab.sandbox-mpkfh-zt-rhelbu.svc.cluster.local
-export IDM_PRIMARY_NAME=idmprimary.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export IDM_REPLICA_NAME=idmreplica.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export IDM_CLIENT1_NAME=idmclient1.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export IDM_CLIENT2_NAME=idmclient2.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export SUBDOMAIN=lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
 
 # Enable cockpit functionality in showroom.
 echo "[WebService]" > /etc/cockpit/cockpit.conf
@@ -71,18 +65,18 @@ EOF
 echo "Create the lab setup script" >> /root/post-run.log
 tee -a /root/labsetup.sh  << EOF
 #!/bin/bash
-PRIMARYADDRESS=\$(nslookup $IDM_PRIMARY_NAME | awk '/^Address: / { print \$2 }')
-REPLICAADDRESS=\$(nslookup $IDM_REPLICA_NAME | awk '/^Address: / { print \$2 }')
-nmcli conn mod 'Wired connection 1' ipv4.ignore-auto-dns yes
-nmcli conn mod 'Wired connection 1' ipv4.dns \$PRIMARYADDRESS,\$REPLICAADDRESS
-nmcli conn mod 'Wired connection 1' ipv6.method disabled
-nmcli conn up 'Wired connection 1'
-nmcli conn mod 'Wired connection 1' ipv4.ignore-auto-dns yes
-nmcli conn up 'Wired connection 1'
+echo "192.168.0.10 idmprimary.example.local" >> /etc/hosts
+echo "192.168.0.11 idmreplica.example.local" >> /etc/hosts
+echo "192.168.0.20 idmclient1.example.local" >> /etc/hosts
+echo "192.168.0.21 idmclient1.example.local" >> /etc/hosts
+nmcli connection add type ethernet con-name eth1 ifname eth1 ipv4.addresses 192.168.0.11/24 ipv4.method manual connection.autoconnect yes
+nmcli conn mod eth1 ipv4.ignore-auto-dns yes
+nmcli conn mod eth1  ipv4.dns 192.168.0.10,192.168.0.11
+nmcli connection up eth1
 sleep 5
-hostnamectl set-hostname $IDM_CLIENT1_NAME
+hostnamectl set-hostname idmclient1.example.local
 hostnamectl
-nslookup $IDM_CLIENT1_NAME
+nslookup idmclient1.example.local
 EOF
 
 chmod +x /root/labsetup.sh
