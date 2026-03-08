@@ -15,6 +15,7 @@ virtualmachines:
         value: "nodes"
     networks:
       - default
+      - secondary
     services:
       - name: idm-webui
         ports:
@@ -46,6 +47,7 @@ virtualmachines:
         value: "nodes"
     networks:
       - default
+      - secondary
     services:
       - name: idm2
         ports:
@@ -73,6 +75,7 @@ virtualmachines:
         value: "bastions"
     networks:
       - default
+      - secondary
     services:
       - name: cockpit
         ports:
@@ -103,3 +106,4 @@ virtualmachines:
         value: "nodes"
     networks:
       - default
+      - secondary
