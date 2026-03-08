@@ -12,12 +12,11 @@ chmod 400 /root/.ssh/config
 dnf -y update
 
 echo "Configure the script variables" >> /root/post-run.log
-# naming based on deployment names e.g. idmreplica.lab.sandbox-mpkfh-zt-rhelbu.svc.cluster.local
-export IDM_PRIMARY_NAME=idmprimary.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export IDM_REPLICA_NAME=idmreplica.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export IDM_CLIENT1_NAME=idmclient1.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export IDM_CLIENT2_NAME=idmclient2.lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
-export SUBDOMAIN=lab.sandbox-${GUID}-zt-rhelbu.svc.cluster.local
+export IDM_PRIMARY_NAME=idmprimary.local
+export IDM_REPLICA_NAME=idmreplica..local
+export IDM_CLIENT1_NAME=idmclient1.local
+export IDM_CLIENT2_NAME=idmclient2.local
+export SUBDOMAIN=local
 export REALM=${SUBDOMAIN^^}
 export NETBIOS=${GUID^^}
 
@@ -46,12 +45,13 @@ dnf -y install ipa-server ipa-server-dns ipa-healthcheck
 echo "Create the lab setup scripts" >> /root/post-run.log
 tee -a /root/labsetup.sh << EOF
 #!/bin/bash
-REPLICAIPADDRESS=\$(nslookup $IDM_REPLICA_NAME | awk '/^Address: / { print \$2 }')
-MYIPADDRESS=\$(hostname --all-ip-addresses)
-echo "\$MYIPADDRESS $IDM_PRIMARY_NAME" >> /etc/hosts
-echo "\$REPLICAIPADDRESS $IDM_REPLICA_NAME" >> /etc/hosts
-nmcli conn mod 'Wired connection 1' ipv6.method disabled
-nmcli conn up 'Wired connection 1'
+echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
+echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
+echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
+echo "192.168.0.21 $IDM_CLIENT1_NAME" >> /etc/hosts
+nmcli connection add type ethernet con-name eth1 ifname eth1 ipv4.addresses 192.168.0.10/24 ipv4.method manual connection.autoconnect yes
+nmcli connection up eth1
+
 sleep 2
 hostnamectl set-hostname $IDM_PRIMARY_NAME
 hostnamectl
@@ -62,13 +62,12 @@ chmod +x /root/labsetup.sh
 
 tee -a /root/trustednetwork.sh << EOF
 #!/bin/bash
-CIDR=\$(hostname --all-ip-addresses | cut -d"." -f1-2 | awk '{ print \$1".0.0/22" }')
 mv /etc/named/ipa-ext.conf /etc/named/ipa-ext.\$(date +"%s").bak
 tee -a /etc/named/ipa-ext.conf << TRUSTED
 acl "trusted_network" { 
     localnets; 
     localhost; 
-    \$CIDR; 
+    192.168.0.0/24; 
 };
 TRUSTED
 
