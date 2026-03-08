@@ -13,7 +13,7 @@ dnf -y update
 
 echo "Configure the script variables" >> /root/post-run.log
 export IDM_PRIMARY_NAME=idmprimary.local
-export IDM_REPLICA_NAME=idmreplica..local
+export IDM_REPLICA_NAME=idmreplica.local
 export IDM_CLIENT1_NAME=idmclient1.local
 export IDM_CLIENT2_NAME=idmclient2.local
 export SUBDOMAIN=local
