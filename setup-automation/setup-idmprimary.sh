@@ -85,4 +85,23 @@ chmod +x /root/trustednetwork.sh
 echo "Set the timezone" >> /root/post-run.log
 timedatectl set-timezone America/Toronto
 
+tee -a /root/ipa-web.sh << EOF
+#!/bin/bash
+tee -a /etc/httpd/conf.d/ipa-rewrite.conf < IPA
+# VERSION 7 - DO NOT REMOVE THIS LINE
+
+RequestHeader set Host idmprimary.example.local
+RequestHeader set Referer https://idmprimary.example.local/ipa/ui/
+RewriteEngine on
+
+# Rewrite for plugin index, make it like it's a static file
+RewriteRule ^/ipa/ui/js/freeipa/plugins.js$    /ipa/wsgi/plugins.py [PT]
+
+RewriteCond %{HTTP_HOST}    ^ipa-ca.example.local$ [NC]
+RewriteCond %{REQUEST_URI}  !^/ipa/crl
+RewriteCond %{REQUEST_URI}  !^/(ca|kra|pki|acme)
+IPA
+
+EOF
+
 echo "DONE" >> /root/post-run.log
