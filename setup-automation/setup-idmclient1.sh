@@ -76,7 +76,7 @@ nmcli connection up eth1
 sleep 5
 hostnamectl set-hostname idmclient1.example.local
 hostnamectl
-nslookup idmclient1.example.local
+ping -c3 idmclient1.example.local
 EOF
 
 chmod +x /root/labsetup.sh
