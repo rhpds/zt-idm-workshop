@@ -101,7 +101,7 @@ RewriteCond %{HTTP_HOST}    ^ipa-ca.example.example.local$ [NC]
 RewriteCond %{REQUEST_URI}  !^/ipa/crl
 RewriteCond %{REQUEST_URI}  !^/(ca|kra|pki|acme)
 IPA
-
+systemctl reload httpd
 EOF
 
 echo "DONE" >> /root/post-run.log
