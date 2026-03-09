@@ -87,7 +87,7 @@ timedatectl set-timezone America/Toronto
 
 tee -a /root/ipa-web.sh << EOF
 #!/bin/bash
-tee -a /etc/httpd/conf.d/ipa-rewrite.conf < IPA
+tee /etc/httpd/conf.d/ipa-rewrite.conf << IPA
 # VERSION 7 - DO NOT REMOVE THIS LINE
 
 RequestHeader set Host idmprimary.example.example.local
