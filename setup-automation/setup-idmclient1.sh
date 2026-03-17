@@ -24,9 +24,11 @@ echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
 echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
 echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
 echo "192.168.0.21 $IDM_CLIENT2_NAME" >> /etc/hosts
+hostnamectl set-hostname idmclient1.example.local
 nmcli conn mod "Wired connection 2" ipv4.addresses 192.168.0.20/24 ipv4.dns 192.168.0.10 ipv4.method manual connection.autoconnect yes
 nmcli conn up "Wired connection 2" 
-
+nmcli conn mod "Wired connection 1" ipv4.dns 192.168.0.10
+nmcli conn up "Wired connection 1" 
 
 # Enable cockpit functionality in showroom.
 echo "[WebService]" > /etc/cockpit/cockpit.conf
@@ -37,16 +39,14 @@ systemctl enable --now cockpit.socket
 echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
+echo "Install the ipa-client packages and lab packages" >> /root/post-run.log
+dnf -y install firewalld bind-utils net-tools ipa-client httpd mod_wsgi
+
 echo "Configure the firewall for httpd" >> /root/post-run.log
 firewall-cmd --permanent --add-service http
 firewall-cmd --reload
 
-echo "Install the ipa-client packages" >> /root/post-run.log
-dnf -y install bind-utils
-dnf -y install ipa-client
-
-echo "Install http for sample app" >> /root/post-run.log
-dnf -y install httpd mod_wsgi
+echo "Configure http for sample app" >> /root/post-run.log
 rm -f /etc/httpd/conf.d/welcome.conf
 
 echo "Create the sample app" >> /root/post-run.log
@@ -76,25 +76,6 @@ tee -a /etc/httpd/conf.d/app.conf << EOF
     </Directory>
 </VirtualHost>
 EOF
-
-echo "Create the lab setup script" >> /root/post-run.log
-tee -a /root/labsetup.sh  << EOF
-#!/bin/bash
-echo "192.168.0.10 idmprimary.example.local" >> /etc/hosts
-echo "192.168.0.11 idmreplica.example.local" >> /etc/hosts
-echo "192.168.0.20 idmclient1.example.local" >> /etc/hosts
-echo "192.168.0.21 idmclient1.example.local" >> /etc/hosts
-nmcli connection add type ethernet con-name eth1 ifname eth1 ipv4.addresses 192.168.0.11/24 ipv4.method manual connection.autoconnect yes
-nmcli conn mod eth1 ipv4.ignore-auto-dns yes
-nmcli conn mod eth1  ipv4.dns 192.168.0.10,192.168.0.11
-nmcli connection up eth1
-sleep 5
-hostnamectl set-hostname idmclient1.example.local
-hostnamectl
-ping -c3 idmclient1.example.local
-EOF
-
-chmod +x /root/labsetup.sh
 
 echo "Set the timezone" >> /root/post-run.log
 timedatectl set-timezone America/Toronto

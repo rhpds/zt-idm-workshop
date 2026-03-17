@@ -264,4 +264,20 @@ nslookup cdn.redhat.com
 
 You should see the records come back for the local akamai edge network server replicating the CDN content.
 
+Lastly, if we are allowing new systems DNS to be registered, we want to make sure that we allow reverse records to be syncrhonised automatically.
+This is done either through the Web UI, which we will look at later, or through the ipa CLI.
+
+[source,bash]
+----
+ipa dnsconfig-mod --allow-sync-ptr=true
+----
+
+The result should look something like the following:
+
+[source]
+----
+  Allow PTR sync: True
+  IPA DNS servers: idmprimary.example.local
+----
+
 We are now ready to register client systems!

@@ -24,6 +24,13 @@ echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
 echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
 echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
 echo "192.168.0.21 $IDM_CLIENT2_NAME" >> /etc/hosts
+
+echo "Setting the hostname" >> /root/post-run.log
+
+hostnamectl set-hostname idmprimary.example.local
+
+hostnamectl >> /run/post-run.log
+
 nmcli conn mod "Wired connection 2" ipv4.addresses 192.168.0.10/24 ipv4.method manual connection.autoconnect yes
 nmcli conn up "Wired connection 2" 
 
@@ -31,10 +38,13 @@ nmcli conn up "Wired connection 2"
 echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
+echo "Install the ipa-server packages" >> /root/post-run.log
+dnf -y install ipa-server ipa-server-dns ipa-healthcheck firewalld net-tools
+
 echo "Configure the firewall for IdM Server" >> /root/post-run.log
 firewall-cmd --permanent --add-service=dns
-firewall-cmd --permanent --add-service=http
-firewall-cmd --permanent --add-service=https
+firewall-cmd --permanent --add-service=http  # redundant really
+firewall-cmd --permanent --add-service=https # redundant really
 firewall-cmd --permanent --add-service=freeipa-4
 firewall-cmd --permanent --add-service=freeipa-ldap
 firewall-cmd --permanent --add-service=freeipa-ldaps
@@ -47,9 +57,6 @@ firewall-cmd --reload
 # echo "server    time.chu.nrc.ca         iburst" >> /etc/chrony.conf
 # echo "server    0.pool.utoronto.ca      iburst" >> /etc/chrony.conf
 # echo "server    1.pool.utoronto.ca      iburst" >> /etc/chrony.conf
-
-echo "Install the ipa-server packages" >> /root/post-run.log
-dnf -y install ipa-server ipa-server-dns ipa-healthcheck
 
 tee -a /root/trustednetwork.sh << EOF
 #!/bin/bash

@@ -24,12 +24,18 @@ echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
 echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
 echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
 echo "192.168.0.21 $IDM_CLIENT2_NAME" >> /etc/hosts
+hostnamectl set-hostname idmreplica.example.local
 nmcli conn mod "Wired connection 2" ipv4.addresses 192.168.0.11/24 ipv4.dns 192.168.0.10 ipv4.method manual connection.autoconnect yes
 nmcli conn up "Wired connection 2" 
+nmcli conn mod "Wired connection 1" ipv4.dns 192.168.0.10
+nmcli conn up "Wired connection 1" 
 
 # rhel user is already part of wheel
 echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
+
+echo "Install the ipa-server packages" >> /root/post-run.log
+dnf -y install ipa-server ipa-server-dns ipa-healthcheck firewalld net-tools
 
 echo "Configure the firewall for IdM Server" >> /root/post-run.log
 firewall-cmd --permanent --add-service=dns
@@ -41,9 +47,6 @@ firewall-cmd --permanent --add-service=freeipa-ldaps
 firewall-cmd --permanent --add-service=freeipa-replication
 firewall-cmd --permanent --add-service=freeipa-trust
 firewall-cmd --reload
-
-echo "Install the ipa-server packages" >> /root/post-run.log
-dnf -y install ipa-server ipa-server-dns ipa-healthcheck
 
 tee -a /root/trustednetwork.sh << EOF
 #!/bin/bash

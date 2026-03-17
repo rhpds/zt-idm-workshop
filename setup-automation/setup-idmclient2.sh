@@ -24,8 +24,11 @@ echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
 echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
 echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
 echo "192.168.0.21 $IDM_CLIENT2_NAME" >> /etc/hosts
+hostnamectl set-hostname idmclient2.example.local
 nmcli conn mod "Wired connection 2" ipv4.addresses 192.168.0.21/24 ipv4.dns 192.168.0.10 ipv4.method manual connection.autoconnect yes
 nmcli conn up "Wired connection 2" 
+nmcli conn mod "Wired connection 1" ipv4.dns 192.168.0.10
+nmcli conn up "Wired connection 1" 
 
 # Enable cockpit functionality in showroom.
 echo "[WebService]" > /etc/cockpit/cockpit.conf
@@ -36,13 +39,13 @@ systemctl enable --now cockpit.socket
 echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
+echo "Install the ipa-client packages and lab packages" >> /root/post-run.log
+dnf -y install firewalld bind-utils net-tools ipa-client
+
 echo "Configure the firewall for httpd" >> /root/post-run.log
 firewall-cmd --permanent --add-service http
 firewall-cmd --reload
 
-echo "Install the ipa-client packages" >> /root/post-run.log
-dnf -y install bind-utils
-dnf -y install ipa-client
 
 chmod +x /root/labsetup.sh
 
