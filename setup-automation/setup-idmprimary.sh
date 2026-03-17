@@ -11,7 +11,7 @@ chmod 400 /root/.ssh/config
 
 dnf -y update
 
-echo "Configure the script variables" >> /root/post-run.log
+echo "Configure idm network"
 export IDM_PRIMARY_NAME=idmprimary.example.local
 export IDM_REPLICA_NAME=idmreplica.example.local
 export IDM_CLIENT1_NAME=idmclient1.example.local
@@ -20,12 +20,21 @@ export SUBDOMAIN=local
 export REALM=${SUBDOMAIN^^}
 export NETBIOS=${GUID^^}
 
+echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
+echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
+echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
+echo "192.168.0.21 $IDM_CLIENT2_NAME" >> /etc/hosts
+nmcli conn mod "Wired connection 2" ipv4.addresses 192.168.0.10/24 ipv4.method manual connection.autoconnect yes
+nmcli conn up "Wired connection 2" 
+
 # rhel user is already part of wheel
 echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
 echo "Configure the firewall for IdM Server" >> /root/post-run.log
 firewall-cmd --permanent --add-service=dns
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
 firewall-cmd --permanent --add-service=freeipa-4
 firewall-cmd --permanent --add-service=freeipa-ldap
 firewall-cmd --permanent --add-service=freeipa-ldaps
@@ -41,24 +50,6 @@ firewall-cmd --reload
 
 echo "Install the ipa-server packages" >> /root/post-run.log
 dnf -y install ipa-server ipa-server-dns ipa-healthcheck
-
-echo "Create the lab setup scripts" >> /root/post-run.log
-tee -a /root/labsetup.sh << EOF
-#!/bin/bash
-echo "192.168.0.10 $IDM_PRIMARY_NAME" >> /etc/hosts
-echo "192.168.0.11 $IDM_REPLICA_NAME" >> /etc/hosts
-echo "192.168.0.20 $IDM_CLIENT1_NAME" >> /etc/hosts
-echo "192.168.0.21 $IDM_CLIENT1_NAME" >> /etc/hosts
-nmcli connection add type ethernet con-name eth1 ifname eth1 ipv4.addresses 192.168.0.10/24 ipv4.method manual connection.autoconnect yes
-nmcli connection up eth1
-
-sleep 2
-hostnamectl set-hostname $IDM_PRIMARY_NAME
-hostnamectl
-ping -c 3 $IDM_PRIMARY_NAME
-EOF
-
-chmod +x /root/labsetup.sh
 
 tee -a /root/trustednetwork.sh << EOF
 #!/bin/bash

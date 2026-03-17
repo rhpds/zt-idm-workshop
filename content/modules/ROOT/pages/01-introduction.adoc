@@ -60,16 +60,6 @@ Throughout the workshop we will create a variety of other users.
 The instructions will be clear as to what operations are to be performed using a specific login.
 
 ==== Let's get started
-
-*To prepare for the lab, please select the 'IdM Primary' tab and execute the following command:*
-
-[source,bash]
-----
-/root/labsetup.sh
-----
-
-This command simply updates our local hosts file with the private ip of our cloud instance.
-
 === Exercise 1.1 - Install the IdM server
 
 The IdM server binaries are provided in the ipa-server package. 
