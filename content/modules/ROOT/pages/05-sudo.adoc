@@ -1,6 +1,5 @@
 == Welcome to challenge 5
 
-[[sudo-rule-management-1]]
 === Sudo Rule Management
 
 Sudo is a program that allows users to run programs as another user with

@@ -1,0 +1,30 @@
+== Welcome to challenge 6
+
+=== SELinux User Maps
+
+SELinux is a mandatory access controls mechanism for Linux, providing more powerful and flexible access control than traditional Unix permissions.
+For a complete overview of SELinux please work with your Red Hat account team to schedule an SELinux policy workshop.
+
+All ojects in Red Hat Enterprise, including users, have an SELinux context consisting of 4 context elements: a user (u), role (r), type (t) and sensitivity (s) values.
+Multi-Level Security SELinux uses the sensitivity element in addition to a category (c) element. 
+For non-MLS SELinux (default), the sensitivity is typically set to s0. 
+Virtually all commands in RHEL include a -Z option to display the SELinux context. 
+
+As an example, for our user alice, you can display the context by entering:
+
+[source,bash]
+----
+[alice@idmclient1] id -Z
+unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+----
+
+SELinux user maps allow administrators to centrally manage user confinement
+through Red Hat Identity Management. 
+
+In this unit, you will cause users to be confined by an SELinux role-based access control (RBAC) policy when the log into hosts that are members of the webservers Host Group.
+You will also learn how to change a user's SELinux context when they execute commands via sudo.
+
+Note: SELinux contexts are applied during PAM-based login, so when testing our changes in this unit su -l <user> will not suffice: it is necessary to log in via SSH.
+You can do this from any of the VMs (even client itself).
+
+

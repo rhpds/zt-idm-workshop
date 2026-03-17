@@ -1,16 +1,28 @@
 ---
 # By default egress traffic is not allowed, define below the ports allowed.
+# egress:
+#   - ports:
+#       - protocol: TCP
+#         port: 443
+
+
 egress:
   - ports:
       - protocol: TCP
         port: 443
-
-# The following lines are suggested based on Instruqt's allow_external_ingress fields:
-# idmserver1:
-#   - http
-#   - https
-#   - high-ports
-# idmclient1:
-#   - http
-#   - https
-#   - high-ports
+      - protocol: TCP
+        port: 22
+  - to:
+      - podSelector:
+          matchLabels:
+            kubevirt.io: virt-launcher
+ingress:
+  - ports:
+      - protocol: TCP
+        port: 9090
+      - protocol: TCP
+        port: 443
+  - from:
+      - podSelector:
+          matchLabels:
+            kubevirt.io: virt-launcher
