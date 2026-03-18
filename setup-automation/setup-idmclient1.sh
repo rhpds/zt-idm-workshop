@@ -43,6 +43,7 @@ echo "Install the ipa-client packages and lab packages" >> /root/post-run.log
 dnf -y install firewalld bind-utils net-tools ipa-client httpd mod_wsgi
 
 echo "Configure the firewall for httpd" >> /root/post-run.log
+systemctl enable --now firewalld
 firewall-cmd --permanent --add-service http
 firewall-cmd --reload
 

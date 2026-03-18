@@ -38,6 +38,7 @@ echo "Install the ipa-server packages" >> /root/post-run.log
 dnf -y install ipa-server ipa-server-dns ipa-healthcheck firewalld net-tools
 
 echo "Configure the firewall for IdM Server" >> /root/post-run.log
+systemctl enable --now firewalld
 firewall-cmd --permanent --add-service=dns
 firewall-cmd --permanent --add-service=http  # redundant really
 firewall-cmd --permanent --add-service=https # redundant really
