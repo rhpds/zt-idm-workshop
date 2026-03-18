@@ -1,4 +1,4 @@
-== Welcome to challenge 6
+== Welcome to Module 6
 
 === SELinux User Maps
 
