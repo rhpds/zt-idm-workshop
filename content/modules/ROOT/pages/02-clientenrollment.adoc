@@ -10,14 +10,6 @@ We will either be doing automatic or manual discovery of our IdM Server.
 In many implementations, we can use automatic discovery to pick up the SRV records that will direct the client to the IdM server.
 In some environments we rely on other automation or a manual input of domain information.
 
-If you have not been told to run the script, please proceed to Exercise 2.1
-
-If you have been asked to run the script, please run this script in the *IdM Client1* terminal window
-[source,bash]
-----
-/root/labsetup.sh
-----
-
 === Exercise 2.1 - Configure the IdM client
 
 The IdM client software is not installed by default on a Red Hat Enterprise Linux system.
@@ -38,7 +30,7 @@ Run the following command in the *IdM Client* terminal window.
 
 [source,bash]
 ----
-ipa-client-install --mkhomedir
+ipa-client-install --mkhomedir --enable-dns-updates
 ----
 
 As with our server installation, we are using the mkhomedir argument to ensure that a home directory is created for users at first login.
@@ -51,8 +43,9 @@ If you have been told in this lab that we are using automatic discovery, the ins
 If you have been told that we will use manual configuration, you will be asked for the name of the domain and the name of the idm server.
 Enter the values below. The unique identifier for your particular instance should be automatically provide as part of the name after 'sandbox'.
 
-The domain is: lab.sandbox-${guid}-zt-rhelbu.svc.cluster.local
-The server is: idmprimary.lab.sandbox-${guid}-zt-rhelbu.svc.cluster.local
+The domain is: *example.local*
+
+The server is: *idmclient1.example.local*
 
 You will be asked to verify that you want to proceed with fixed values instead of automatic discovery. Type *yes*.
 

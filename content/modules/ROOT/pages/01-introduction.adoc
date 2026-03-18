@@ -114,9 +114,7 @@ There are several more questions related to the DNS configuration, NETBIOS name,
 
 First the setup tries to determine if forwarding is necessary, pressing *Enter* or typing *yes* to search for forwarders.
 ----
-Checking DNS domain lab.sandbox-hwlcf-zt-rhelbu.svc.cluster.local., please wait ...
-No network interface matches the IP address 10.130.9.240
-WARNING: No network interface matches the IP address 10.130.9.240
+Checking DNS domain example.local, please wait ...
 Do you want to configure DNS forwarders? [yes]: 
 ----
 
