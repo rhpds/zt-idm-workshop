@@ -268,18 +268,18 @@ ____
 NOTE: The solution for *_Exercise 5.2.1_* command line example is below.
 ____
 
-This concludes the unit 5 and IdM Workshop - Part I, your Red Hat Team thanks you for participating!
+This concludes the module 5 and IdM Workshop - Part I, your Red Hat Team thanks you for participating!
 
 If you are interested in more, IdM Workshop - Part II covers the following:
 
+* SELinux User Mapping
+* SSH key management
 * Replica Deployment
 * Certificate and Service Management
-* SELinux User Mapping
 * User and Service Vaults
-* Integrating with External IDPs
-* and much more.
+* and more.
 
-You can let us know how you enjoyed the workshop on the next page.
+If you are in the two day workshop, you can start module 6 on the next page!
 
 === Solution to Exercise 5.2.1
 
