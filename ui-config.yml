@@ -24,6 +24,15 @@ antora:
     - name: "07-sshkeymanagement"
       label: "Sshkeymanagement"
       solveButton: false
+    - name: "08-replicainstall"
+      label: "Replicainstall"
+      solveButton: false
+    - name: "09-certmanagement"
+      label: "Certmanagement"
+      solveButton: false
+    - name: "10-vaultmanagement"
+      label: "Vaultmanagement"
+      solveButton: false
 
 tabs:
   - name: "IdM Primary"
@@ -36,6 +45,9 @@ tabs:
       - 05-sudo
       - 06-selinuxusermaps
       - 07-sshkeymanagement
+      - 08-replicainstall
+      - 09-certmanagement
+      - 10-vaultmanagement
 
   - name: "IdM Client1"
     url: /wetty_idmclient1/ssh/root
@@ -47,6 +59,9 @@ tabs:
       - 05-sudo
       - 06-selinuxusermaps
       - 07-sshkeymanagement
+      - 08-replicainstall
+      - 09-certmanagement
+      - 10-vaultmanagement
 
 # The url line uses the name of the *service* entry from the instance.yaml file
 # NOT the hostname/name of the system the name of the server
