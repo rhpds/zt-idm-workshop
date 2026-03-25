@@ -21,6 +21,9 @@ antora:
     - name: "06-selinuxusermaps"
       label: "Selinuxusermaps"
       solveButton: false
+    - name: "07-sshkeymanagement"
+      label: "Sshkeymanagement"
+      solveButton: false
 
 tabs:
   - name: "IdM Primary"
@@ -32,6 +35,7 @@ tabs:
       - 04-hostbasedaccesscontrol
       - 05-sudo
       - 06-selinuxusermaps
+      - 07-sshkeymanagement
 
   - name: "IdM Client1"
     url: /wetty_idmclient1/ssh/root
@@ -42,6 +46,7 @@ tabs:
       - 04-hostbasedaccesscontrol
       - 05-sudo
       - 06-selinuxusermaps
+      - 07-sshkeymanagement
 
 # The url line uses the name of the *service* entry from the instance.yaml file
 # NOT the hostname/name of the system the name of the server
