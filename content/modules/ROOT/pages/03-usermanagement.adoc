@@ -246,7 +246,7 @@ Valid starting     Expires            Service principal
 03/17/26 21:06:03  03/18/26 20:12:35  krbtgt/EXAMPLE.LOCAL@EXAMPLE.LOCAL
 03/17/26 21:08:34  03/18/26 20:12:35  host/idmprimary.example.local@EXAMPLE.LOCAL
 [root@idmclient1 ~]# 
----
+----
 
 Try that now. You should see output similar to the following:
 
