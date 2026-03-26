@@ -1,0 +1,7 @@
+=== Welcome to Module 10
+==== Managing User, Service and System vaults with Identity Management
+
+This module in the workshop is a demonstration provided by your instructor
+
+==== Demonstration - Managing Secrets with using Vaults
+

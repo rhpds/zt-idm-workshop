@@ -1,33 +1,123 @@
-Unit 7: Replica installation
-Prerequisites:
+=== Welcome to Module 8
+==== IdM Replica installation
 
-:ref:`Unit 1: Installing the FreeIPA server <1-server-install>`
-FreeIPA is designed to be run in a replicated multi-master environment. In this unit, we will install a replica of the existing master. For recommended production topologies, see https://www.freeipa.org/page/Deployment_Recommendations#Servers.2FReplicas.
+Red Hat Identity Management supports deployment as a full mesh replicated environment.
+In this module, you will install a replica of the existing IdM primary system.
+This creates a simple replication agreement between 2 IdM instances.
+The first system is called the primary only because it was deployed first.
+The primary and the replica will be functionally identical once deployed.
+
+Red Hat Identity Management supports up to 64 replicas in a topology to manage truly large environments. 
+For larger deployments with more varying load characteristics, IdM supports service segregation, asymetric replication agreements and a variety of topologies to support enterprise requirements.
+The planning guide for Red Hat Identity Management covers many of these scenarios and provides guidance and recommended topology architectures.
+
+=== Exercise 8.1 Installing the idmreplica node
 
 If you have disabled the allow_all HBAC rule, add a new rule that will allow ``admin`` to access the ``sshd`` service on any host.
 
-Client installation
-The first step of replica creation is to enrol the machine that will become the replica. SSH to the replica VM and enrol it per :ref:`Unit 2: Enrolling client machines <2-client-install>`
+Identity Management ships with full support for automated deployment using Ansible Roles. The official redhat.rhel_idm collection is available for download from the Ansible Automation Hub through the link:https://console.redhat.com/ansible/automation-hub/collections/published/redhat/rhel_idm/details[Red Hat Hybrid Cloud Console]
+The value of using automation plays to deploy both IdM Primary and Replica servers is that these roles ensure that all prerequisites are met and installed.
+This reduces the effort required to validate a system prior to deployment and saves time. 
+It is also very consistent and repeatable reducing the potential for human error.
 
-Replica promotion
-Now promote the client to server. We will set up the replica without the CA or DNS role. In a production deployment there should be at least one instance of these services in each data centre. These roles can be configured later via ipa-ca-install(1) and ipa-dns-install(1).
+In preparation for replica deployment we will go through a number of the steps manually.
 
-[replica]$ sudo ipa-replica-install
-Password for admin@IPADEMO.LOCAL:
-ipaserver.install.server.replicainstall: ERROR    Reverse DNS resolution of address 192.168.33.10 (server.ipademo.local) failed. Clients may not function properly. Please check your DNS setup. (Note that this check queries IPA DNS directly and ignores /etc/hosts.)
-Continue? [no]: yes
-Run connection check to master
-Connection check OK
+The first step is to ensure that firewalld allows access to the required ports on the system. As ``root`` run the following commands from ``idmclient1`` 
+
+[source,bash]
+----
+ssh idmreplica.example.local
+----
+
+As in module 1, we have ensured that the required services to support the idmreplica deployment are enabled on ``idmreplica``. You can examine the services.
+
+[source,bash]
+----
+firewall-cmd --list-services
+----
+
+As you would expect for a replica, the same ports are open on the replica as on the primary.
+We have also installed the required server software during the lab setup. 
+
+Ensure that the umask is set to 0022 during the deployment. 
+
+[source,bash]
+----
+umask 0022
+----
+
+There are two primary methods of installing a replica:
+
+1. deploying a replica on a system that is not enrolled as part of the IdM realm.
+2. promoting a client that is already enrolled in the realm to an IdM Replica server. 
+
+You would use method 1 if you have access as the root user.
+If you had deployed the system through automation, for example using Red Hat Satellite provisioning, the provisioning process of Satellite is capable of automatically enrolling systems to the Identity Management realm at build time.
+
+In this exercise we will be deploying a full replica from a system not already registered. 
+
+We create the replica by running the ``ipa-replica-install`` command as root, with the appropriate parameters. In our example, we are ensuring that our system is deployed the same as our primary.
+
+[source,bash]
+----
+ipa-replica-install --setup-ca --setup-dns --forwarder 172.30.0.10 
+---- 
+
+Follow the instructions to complete the interactive deployment.
+When prompted for an authorized user, authenticate as the ``admin`` user with password ``redhat2026``
+
+You will see the installation commence.
+
+----
 Configuring directory server (dirsrv). Estimated time: 30 seconds
   [1/41]: creating directory server instance
   [2/41]: enabling ldapi
-...
-The rest of the replica installation process is almost identical to server installation. One important difference is the initial replication of data to the new Directory Server instance:
+----
 
+The rest of the replica installation process is almost identical to server installation.
+
+One important difference is that you will see the initial replication of data to the new Directory Server instance initialize:
+
+----
 [28/41]: setting up initial replication
 Starting replication, please wait until this has completed.
 Update in progress, 4 seconds elapsed
 Update succeeded
-After ipa-replica-install finishes, the replica is operational. LDAP changes on any server will be replicated to all other servers.
+----
 
-You can proceed to :ref:`Unit 8: Sudo rule management <8-sudorule>` or :ref:`return to the curriculum overview <curriculum-overview>` to see all the available topics.
+After ipa-replica-install finishes, the replica is operational. Any changes on any server will be replicated to all other servers.
+
+We can validate this by creating a user on the new replica.
+
+Authenticate as the ``admin`` user with password ``redhat2026`` on the ``idmreplica`` system
+
+[source,bash]
+----
+kinit admin
+----
+
+Create a test user.
+
+[source,bash]
+----
+ipa user-add test_user
+----
+
+Now you can check to see that the user is visible on another server.
+Check this by examining the Web UI connected to idmprimary or by running the following command on the idmprimary system.
+
+[source,bash]
+----
+ipa user-show test_user
+----
+
+
+This is the end of Module 8
+
+=== What you learned.
+
+- Red Hat Identity Management is a full mesh replication deployment where IdM replica systems are capable of providing identical data and services across the topology
+- Red Hat IdM can scale to support very large enterprise environments
+- Red Hat IdM deployment and configuration can be full automated through the use of Red Hat certified ansible collections to support a gitOps management methodology
+
+Let's examine the Certiciate Authority features of Red Hat Identity Management in our next Module.

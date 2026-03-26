@@ -40,14 +40,44 @@ echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
 echo "Install the ipa-client packages and lab packages" >> /root/post-run.log
-dnf -y install firewalld bind-utils net-tools ipa-client
+dnf -y install firewalld bind-utils net-tools sssd-dbus vim nano ipa-client httpd mod_lookup_identity mod_authnz_pam haveged nmap-ncat pamtester bash-completion
 
 echo "Configure the firewall for httpd" >> /root/post-run.log
 systemctl enable --now firewalld
 firewall-cmd --permanent --add-service http
 firewall-cmd --reload
 
-chmod +x /root/labsetup.sh
+sudo rm -f /etc/httpd/conf.d/welcome.conf
+
+sudo sh -c "cat >/usr/share/httpd/app.py" <<EOF
+def application(environ, start_response):
+    start_response('200 OK', [('Content-Type', 'text/plain')])
+    remote_user = environ.get('REMOTE_USER')
+
+    if remote_user is not None:
+        yield "LOGGED IN AS: {}\n".format(remote_user).encode('utf8')
+    else:
+        yield b"NOT LOGGED IN\n"
+
+    yield b"\nREMOTE_* REQUEST VARIABLES:\n\n"
+
+    for k, v in environ.items():
+        if k.startswith('REMOTE_'):
+            yield "  {}: {}\n".format(k, v).encode('utf8')
+EOF
+
+sudo sh -c "cat >/etc/httpd/conf.d/app.conf" <<EOF
+<VirtualHost *:80>
+    ServerName idmclient2.example.local
+    WSGIScriptAlias / /usr/share/httpd/app.py
+
+    <Directory /usr/share/httpd>
+        <Files "app.py">
+            Require all granted
+        </Files>
+    </Directory>
+</VirtualHost>
+EOF
 
 echo "Set the timezone" >> /root/post-run.log
 timedatectl set-timezone America/Toronto

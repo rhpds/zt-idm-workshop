@@ -128,6 +128,8 @@ Make sure you are logged in as admin. (*hint*: check with klist)
 Use the CLI help to find the right command and create the user. (*hint*:
 the _user_ plugin provides the command).
 
+Make sure you add an email address for bob.
+
 Lastly, add *bob* to the *developers* user group using the CLI.
 
 === Exercise 3.3 - User authentication
