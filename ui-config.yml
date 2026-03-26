@@ -73,7 +73,7 @@ tabs:
       - 10-certmanagement
       - 11-vaultmanagement
 
-  - name: "IdM Client1"
+  - name: "IdM Client2"
     url: /wetty_idmclient2/ssh/root
     modules: 
       - 09-applicationauthz

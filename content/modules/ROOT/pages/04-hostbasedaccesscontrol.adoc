@@ -160,9 +160,9 @@ What about *alice* can she access the client host?
 ipa hbactest --user=alice --host=idmclient1.example.local --service=all
 ----
 
-Now try at the command line to ssh from idmserver1 in your environment to idmclient1 as *_bob_*.
+Now try at the command line to ssh from idmprimary in your environment to idmclient1 as *_bob_*.
 What happens?
-Now try at the command line to ssh from the idmserver in your environment to idmclient1 as *_alice_*.
+Now try at the command line to ssh from the idmprimary in your environment to idmclient1 as *_alice_*.
 What happens?
 
 Is this what you expected?
