@@ -54,17 +54,32 @@ There are two primary methods of installing a replica:
 You would use method 1 if you have access as the root user.
 If you had deployed the system through automation, for example using Red Hat Satellite provisioning, the provisioning process of Satellite is capable of automatically enrolling systems to the Identity Management realm at build time.
 
-In this exercise we will be deploying a full replica from a system not already registered. 
+In this exercise we will be promote a system to a full replica from a system already registered to idm. 
 
-We create the replica by running the ``ipa-replica-install`` command as root, with the appropriate parameters. In our example, we are ensuring that our system is deployed the same as our primary.
+Install our client as before.
 
 [source,bash]
 ----
-ipa-replica-install --setup-ca --setup-dns --forwarder 172.30.0.10 
+ipa-client-install --mkhomedir --enable-dns-updates
+----
+
+Authenticate as the admin user.
+
+[source,bash]
+----
+kinit admin
+----
+
+Now can promote the system to a replica by running the ``ipa-replica-install`` command with the appropriate parameters. In our example, we are ensuring that our system is deployed the same as our primary.
+
+[source,bash]
+----
+ipa-replica-install --setup-ca \
+    --setup-dns \
+    --forwarder 172.30.0.10
 ---- 
 
-Follow the instructions to complete the interactive deployment.
-When prompted for an authorized user, authenticate as the ``admin`` user with password ``redhat2026``
+Follow the instructions to complete the deployment.
 
 You will see the installation commence.
 
