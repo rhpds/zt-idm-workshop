@@ -224,9 +224,10 @@ ipactl status
 
 Verify the health of the server.
 
-....
+[source,bash]
+----
 ipa-healthcheck
-....
+----
 
 A fully-functioning IdM installation returns an empty result of [].
 In our environment you may see a permissions error on a file in /var
