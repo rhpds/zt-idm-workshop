@@ -40,7 +40,7 @@ echo "enable bash completion in the root's shell" >> /root/post-run.log
 echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
 
 echo "Install the ipa-client packages and lab packages" >> /root/post-run.log
-dnf -y install firewalld bind-utils net-tools sssd-dbus vim nano ipa-client httpd mod_lookup_identity mod_authnz_pam haveged nmap-ncat pamtester bash-completion
+dnf -y install firewalld bind-utils net-tools sssd-dbus vim nano ipa-client httpd mod_lookup_identity mod_authnz_pam mod_wsgi haveged nmap-ncat pamtester bash-completion
 
 echo "Configure the firewall for httpd" >> /root/post-run.log
 systemctl enable --now firewalld
