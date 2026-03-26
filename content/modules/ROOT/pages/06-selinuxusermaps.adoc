@@ -40,7 +40,10 @@ As an example, for our user *_alice_*, you can display the context by entering:
 
 [source,bash]
 ----
-[alice@idmclient1] id -Z
+id -Z
+----
+
+----
 unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
 ----
 
