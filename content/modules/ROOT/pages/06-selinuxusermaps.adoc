@@ -57,13 +57,13 @@ Since access control to a system is defined by HBAC, it is a good administration
 This ensures that when users or hosts are added to the HBAC rule, the correct SELinux context will automatically be used.
 Sweet.
 
-Back in module 4, we created the *_sysadmin_webservers_* HBAC rule that allows members of the sysadmin User Group to have access to systems in the *_webservers_* host group.
+Back in module 4, we created the *_admins_allow_all_* HBAC rule that allows the *admins* AND the *sysadmins* user group access to any host using any service.
 We can create a new SELinux user map by using the following:
 
 [source,bash]
 ----
 ipa selinuxusermap-add sysadmin_staff_t \
-    --hbacrule sysadmin_webservers --selinuxuser staff_u:s0-s0:c0.c1023
+    --hbacrule admins_allow_all --selinuxuser staff_u:s0-s0:c0.c1023
 ----
 
 The result looks like this:
@@ -73,7 +73,7 @@ Added SELinux User Map "sysadmin_staff_t"
 -----------------------------------------
   Rule name: sysadmin_staff_t
   SELinux User: staff_u:s0-s0:c0.c1023
-  HBAC Rule: sysadmin_webservers
+  HBAC Rule: admins_allow_all
   Enabled: TRUE
 ----
 

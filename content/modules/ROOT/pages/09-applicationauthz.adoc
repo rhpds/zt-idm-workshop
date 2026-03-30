@@ -29,6 +29,18 @@ REMOTE_* REQUEST VARIABLES:
   REMOTE_PORT: 34356
 ----
 
+If nothing is returned run ensure the proper packages are installed.
+
+[source,bash]
+----
+ sudo dnf -y install firewalld bind-utils net-tools sssd-dbus vim nano ipa-client httpd mod_lookup_identity mod_authnz_pam mod_wsgi mod_auth_gssapi mod_ssl haveged nmap-ncat pamtester bash-completion
+----
+
+[source,bash]
+----
+systemctl enable --now httpd
+----
+
 === Exercise 9.1 - Create a service
 
 A service in IdM represents an application we would like to track and authorize on an enrolled system. 

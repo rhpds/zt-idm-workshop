@@ -189,6 +189,13 @@ RPM Signing: RHEL 9.7 introduces rust-rpm-sequoia, allowing verification of Open
 Here is an example of the commands that will be run in the demonstration.
 Discuss with your workshop instructors.
 
+[source,bash]
+----
+# Use these when running RHEL 9.7
+sudo update-crypto-policies --set DEFAULT:PQ
+update-crypto-policies --show
+----
+
 ----
 sudo dnf -y install crypto-policies-pq-preview crypto-policies-scripts
 sudo update-crypto-policies --set DEFAULT:TEST-PQ
