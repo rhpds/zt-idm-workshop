@@ -62,7 +62,7 @@ New signing request "20260215185400" added.
 
 Let's break down some of those command arguments.
 
--i <string> - this is the identity of the request, if you don't provide it a timestamp is generated as the id, names are better for remembering what is being tracked
+-I <string> - this is the identity of the request, if you don't provide it a timestamp is generated as the id, names are better for remembering what is being tracked
 
 -k <path> - Path to private key (Certmonger will generate it)
 
@@ -113,17 +113,39 @@ Can you work out how to save the PEM-encoded certificate to a file?
 Now we can reconfigure Apache to serve our app over TLS.
 Update app.conf to listen on port 443 and add the SSL directives:
 
+[source,bash]
+----
+sudo vim /etc/httpd/conf.d/app.conf
+----
+
 ----
 ...
-Listen 443
 
 <VirtualHost *:443>
     SSLEngine on
     SSLCertificateFile "/etc/pki/tls/certs/app.crt"
     SSLCertificateKeyFile "/etc/pki/tls/private/app.key"
-
     ServerName idmclient2.example.local
-    ...
+
+    WSGIScriptAlias / /usr/share/httpd/app.py
+
+    <Location />
+        AuthType GSSAPI
+        AuthName "Kerberos Login"
+        GssapiCredStore keytab:/etc/httpd/app.keytab
+        Require pam-account app
+        LookupUserAttr mail REMOTE_USER_MAIL
+        LookupUserAttr givenname REMOTE_USER_FIRSTNAME
+        LookupUserAttr sn REMOTE_USER_LASTNAME
+        LookupUserGroupsIter REMOTE_USER_GROUP
+    </Location>
+
+    <Directory /usr/share/httpd>
+        <Files "app.py">
+            Require all granted
+        </Files>
+    </Directory>
+</VirtualHost>
 ----
 
 Restart Apache and make a request to the app over HTTPS:
@@ -141,7 +163,7 @@ REMOTE_* REQUEST VARIABLES:
 
   REMOTE_USER: alice@EXAMPLE.LOCAL
   REMOTE_USER_GROUP_1: ipausers
-  REMOTE_USER_GROUP_2: sysadmin
+  REMOTE_USER_GROUP_2: sysadmins
   REMOTE_USER_GROUP_N: 2
   REMOTE_USER_FIRSTNAME: Alice
   REMOTE_USER_LASTNAME: Armstrong
