@@ -131,39 +131,43 @@ We need to update the sudo rule to change the SELinux context using the followin
 
 [source,bash]
 ----
-ipa sudorule-add-option sysadmin_sudo --sudooption type=unconfined_t
+ipa sudorule-add-option sysadmins_allow_all_production --sudooption type=unconfined_t
 ----
 
 The result of the previous command should look like:
 ----
--------------------------------------------------------------
-Added option "type=unconfined_t" to Sudo Rule "sysadmin_sudo"
--------------------------------------------------------------
-  Rule name: sysadmin_sudo
-  Enabled: TRUE
-  Host category: all
+------------------------------------------------------------------------------
+Added option "type=unconfined_t" to Sudo Rule "sysadmins_allow_all_production"
+------------------------------------------------------------------------------
+  Rule name: sysadmins_allow_all_production
+  Description: Allow sysadmins group root access to production servers
+  Enabled: True
   Command category: all
   RunAs User category: all
   RunAs Group category: all
+  User Groups: sysadmins
+  Host Groups: production
   Sudo Option: type=unconfined_t
 ----
 
 [source,bash]
 ----
-ipa sudorule-add-option sysadmin_sudo --sudooption role=unconfined_r
+ipa sudorule-add-option sysadmins_allow_all_production --sudooption role=unconfined_r
 ----
 
 The result of the previous command should look like:
 ----
--------------------------------------------------------------
-Added option "role=unconfined_r" to Sudo Rule "sysadmin_sudo"
--------------------------------------------------------------
-  Rule name: sysadmin_sudo
-  Enabled: TRUE
-  Host category: all
+------------------------------------------------------------------------------
+Added option "role=unconfined_r" to Sudo Rule "sysadmins_allow_all_production"
+------------------------------------------------------------------------------
+  Rule name: sysadmins_allow_all_production
+  Description: Allow sysadmins group root access to production servers
+  Enabled: True
   Command category: all
   RunAs User category: all
   RunAs Group category: all
+  User Groups: sysadmins
+  Host Groups: production
   Sudo Option: type=unconfined_t, role=unconfined_r
 ----
 
@@ -183,6 +187,8 @@ We should see:
 ----
 staff_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
 ----
+
+If you still see *_staff_u:staff_r:staff_t:s0-s0:c0.c1023_*, then restart *_sssd_* on idmclient1, and wait a couple minutes.
 
 Now lets try to modify the Message of the day again.
 
