@@ -29,7 +29,7 @@ REMOTE_* REQUEST VARIABLES:
   REMOTE_PORT: 34356
 ----
 
-If nothing is returned run ensure the proper packages are installed.
+If nothing is returned run ensure the proper packages are installed, and enable the httpd service.
 
 [source,bash]
 ----
@@ -48,6 +48,28 @@ The host part must be a host enrolled in IdM.
 
 You must be getting the hang of Identity Management by now, so I'll leave the rest of this step up to you. (It's OK to ask for help!)
 
+.Click to reveal
+[%collapsible]
+====
+[source,bash]
+----
+ipa-client-install --mkhomedir --enable-dns-updates
+----
+
+[source,bash]
+----
+ipa service-add HTTP/idmclient2.example.local
+----
+----
+-----------------------------------------------------------
+Added service "HTTP/idmclient2.example.local@EXAMPLE.LOCAL"
+-----------------------------------------------------------
+  Principal name: HTTP/idmclient2.example.local@EXAMPLE.LOCAL
+  Principal alias: HTTP/idmclient2.example.local@EXAMPLE.LOCAL
+  Managed by: idmclient2.example.local
+----
+====
+
 
 === Exercise 9.2 - Retrieve a Kerberos keytab
 
@@ -57,7 +79,7 @@ Retrieve the key from the FreeIPA server and store it in a keytab file (you will
 
 [source,bash]
 ----
-ipa-getkeytab -p HTTP/idmclient.example.local -k app.keytab
+ipa-getkeytab -p HTTP/idmclient2.example.local -k app.keytab
 ----
 
 You should see the output below:
@@ -302,14 +324,26 @@ Added HBAC rule "sysadmin_app"
 
 [source,bash]
 ----
-ipa hbacrule-add-user sysadmin_app --group sysadmin
+ipa hbacsvc-add app
+----
+
+----
+------------------------
+Added HBAC service "app"
+------------------------
+  Service name: app
+----
+
+[source,bash]
+----
+ipa hbacrule-add-user sysadmin_app --group sysadmins
 ----
 
 ----
   Rule name: sysadmin_app
   Host category: all
   Enabled: TRUE
-  User Groups: sysadmin
+  User Groups: sysadmins
 -------------------------
 Number of members added 1
 -------------------------
@@ -323,7 +357,7 @@ ipa hbacrule-add-service sysadmin_app --hbacsvcs app
   Rule name: sysadmin_app
   Host category: all
   Enabled: TRUE
-  User Groups: sysadmin
+  User Groups: sysadmins
   Services: app
 -------------------------
 Number of members added 1
@@ -333,7 +367,12 @@ Number of members added 1
 Next, define the PAM service on client.
 The name must match the hbacsvc name (in our case: app), and the name is indicated by the name of the file that configures the PAM stack.
 
-Create /etc/pam.d/app with the following contents:
+Create /etc/pam.d/app with the following contents
+
+[source,bash]
+----
+vim /etc/pam.d/app
+----
 
 ----
 account required   pam_sss.so
@@ -346,13 +385,23 @@ Finally, update the Apache configuration  ``/etc/httpd/conf.d/app.conf``.
 sudo vim /etc/httpd/conf.d/app.conf
 ----
 
-Find the line:
+Find the line: valid-user
 
 ----
-Require valid-user
-Replace with:
+  7   <Location />
+  8     AuthType GSSAPI
+  9     AuthName "Kerberos Login"
+ 10     GssapiCredStore keytab:/etc/httpd/app.keytab
+ 11     Require valid-user  # THIS ONE
 
-Require pam-account app
+Replace with: pam-account app
+
+  7   <Location />
+  8     AuthType GSSAPI
+  9     AuthName "Kerberos Login"
+ 10     GssapiCredStore keytab:/etc/httpd/app.keytab
+ 11     Require pam-account app  # WITH THIS
+
 ----
 
 Also add the LoadModule directive to the top of the apache configuration file:
@@ -360,6 +409,8 @@ Also add the LoadModule directive to the top of the apache configuration file:
 ----
 LoadModule authnz_pam_module modules/mod_authnz_pam.so
 ----
+
+Final 
 
 Once again, we must set a special SELinux boolean to allow mod_authnz_pam to work:
 
