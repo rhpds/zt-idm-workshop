@@ -49,7 +49,7 @@ We will generate keys and store certificates in the NSS database at /etc/httpd/a
 [source,bash]
 ----
 sudo ipa-getcert request \
-  -i idmclient2_web_service \
+  -I idmclient2_web_service \
   -f /etc/pki/tls/certs/app.crt \
   -k /etc/pki/tls/private/app.key \
   -K HTTP/idmclient2.example.local \
