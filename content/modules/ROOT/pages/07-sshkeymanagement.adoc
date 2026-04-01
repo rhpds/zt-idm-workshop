@@ -96,20 +96,22 @@ After executing the above commands, you should see output similar to the followi
 Modified user "alice"
 ---------------------
   User login: alice
-  First name: Alice
-  Last name: Armstrong
+  First name: alice
+  Last name: Wonderland
   Home directory: /home/alice
   Login shell: /bin/sh
+  Principal name: alice@EXAMPLE.LOCAL
+  Principal alias: alice@EXAMPLE.LOCAL
   Email address: alice@example.local
-  UID: 1278000001
-  GID: 1278000001
-  SSH public key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIATDFPh2pMNByQvy2Yp0MjrJTKz13MFgkuP2a+fRYpIG alice@example.local
-  SSH public key fingerprint: SHA256:3n9y/wIG9q5kZ5KhlJF7+vc+sgboN+nMNOGZilf2734 alice@example.local (ssh-ed25519)
+  UID: 853000003
+  GID: 853000003
+  SSH public key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIMx45YjgdJqifr9fndzQ6sZJR7U3HJYXSxz89tsGDoa alice@example.local
+  SSH public key fingerprint: SHA256:BVuM4BFvQ79dnaRsgp6yxFMGWVDoPJYT/A4Y4WhyT1A alice@example.local (ssh-ed25519)
   Account disabled: False
   Password: True
-  Member of groups: ipausers, sysadmin
-  Indirect Member of Sudo rule: sysadmin_sudo
-  Indirect Member of HBAC rule: sysadmin_all
+  Member of groups: sysadmins, ipausers
+  Indirect Member of Sudo rule: sysadmins_allow_all_production
+  Indirect Member of HBAC rule: admins_allow_all
   Kerberos keys available: True
 ----
 
