@@ -29,6 +29,16 @@ REMOTE_* REQUEST VARIABLES:
   REMOTE_PORT: 34356
 ----
 
+If nothing is returned run ensure the proper packages are installed, and enable the httpd service.
+
+[source,bash]
+----
+ sudo dnf -y install firewalld bind-utils net-tools sssd-dbus vim nano ipa-client httpd mod_lookup_identity mod_authnz_pam mod_wsgi mod_auth_gssapi mod_ssl haveged nmap-ncat pamtester bash-completion
+
+ systemctl enable --now httpd
+----
+
+
 === Exercise 9.1 - Create a service
 
 A service in IdM represents an application we would like to track and authorize on an enrolled system. 
@@ -37,6 +47,28 @@ A service principal name has the service type as its first part, separated from 
 The host part must be a host enrolled in IdM.
 
 You must be getting the hang of Identity Management by now, so I'll leave the rest of this step up to you. (It's OK to ask for help!)
+
+.Click to reveal
+[%collapsible]
+====
+[source,bash]
+----
+ipa-client-install --mkhomedir --enable-dns-updates
+----
+
+[source,bash]
+----
+ipa service-add HTTP/idmclient2.example.local
+----
+----
+-----------------------------------------------------------
+Added service "HTTP/idmclient2.example.local@EXAMPLE.LOCAL"
+-----------------------------------------------------------
+  Principal name: HTTP/idmclient2.example.local@EXAMPLE.LOCAL
+  Principal alias: HTTP/idmclient2.example.local@EXAMPLE.LOCAL
+  Managed by: idmclient2.example.local
+----
+====
 
 
 === Exercise 9.2 - Retrieve a Kerberos keytab
@@ -47,7 +79,7 @@ Retrieve the key from the FreeIPA server and store it in a keytab file (you will
 
 [source,bash]
 ----
-ipa-getkeytab -p HTTP/idmclient.example.local -k app.keytab
+ipa-getkeytab -p HTTP/idmclient2.example.local -k app.keytab
 ----
 
 You should see the output below:
@@ -292,14 +324,26 @@ Added HBAC rule "sysadmin_app"
 
 [source,bash]
 ----
-ipa hbacrule-add-user sysadmin_app --group sysadmin
+ipa hbacsvc-add app
+----
+
+----
+------------------------
+Added HBAC service "app"
+------------------------
+  Service name: app
+----
+
+[source,bash]
+----
+ipa hbacrule-add-user sysadmin_app --group sysadmins
 ----
 
 ----
   Rule name: sysadmin_app
   Host category: all
   Enabled: TRUE
-  User Groups: sysadmin
+  User Groups: sysadmins
 -------------------------
 Number of members added 1
 -------------------------
@@ -313,7 +357,7 @@ ipa hbacrule-add-service sysadmin_app --hbacsvcs app
   Rule name: sysadmin_app
   Host category: all
   Enabled: TRUE
-  User Groups: sysadmin
+  User Groups: sysadmins
   Services: app
 -------------------------
 Number of members added 1
@@ -323,7 +367,12 @@ Number of members added 1
 Next, define the PAM service on client.
 The name must match the hbacsvc name (in our case: app), and the name is indicated by the name of the file that configures the PAM stack.
 
-Create /etc/pam.d/app with the following contents:
+Create /etc/pam.d/app with the following contents
+
+[source,bash]
+----
+vim /etc/pam.d/app
+----
 
 ----
 account required   pam_sss.so
@@ -336,19 +385,63 @@ Finally, update the Apache configuration  ``/etc/httpd/conf.d/app.conf``.
 sudo vim /etc/httpd/conf.d/app.conf
 ----
 
-Find the line:
+Find the line: valid-user
 
 ----
-Require valid-user
-Replace with:
+  7   <Location />
+  8     AuthType GSSAPI
+  9     AuthName "Kerberos Login"
+ 10     GssapiCredStore keytab:/etc/httpd/app.keytab
+ 11     Require valid-user  # THIS ONE
 
-Require pam-account app
+Replace with: pam-account app
+
+  7   <Location />
+  8     AuthType GSSAPI
+  9     AuthName "Kerberos Login"
+ 10     GssapiCredStore keytab:/etc/httpd/app.keytab
+ 11     Require pam-account app  # WITH THIS
+
 ----
 
 Also add the LoadModule directive to the top of the apache configuration file:
 
 ----
 LoadModule authnz_pam_module modules/mod_authnz_pam.so
+----
+
+What the file should look like.
+
+.Click to reveal
+[%collapsible]
+====
+----
+LoadModule lookup_identity_module modules/mod_lookup_identity.so
+LoadModule authnz_pam_module modules/mod_authnz_pam.so
+
+<VirtualHost *:80>
+  ServerName client.ipademo.local
+  WSGIScriptAlias / /usr/share/httpd/app.py
+
+  <Location />
+    AuthType GSSAPI
+    AuthName "Kerberos Login"
+    GssapiCredStore keytab:/etc/httpd/app.keytab
+    Require pam-account app
+
+    LookupUserAttr mail REMOTE_USER_MAIL
+    LookupUserAttr givenname REMOTE_USER_FIRSTNAME
+    LookupUserAttr sn REMOTE_USER_LASTNAME
+    LookupUserGroupsIter REMOTE_USER_GROUP
+  </Location>
+
+  <Directory /usr/share/httpd>
+    <Files "app.py">
+      Require all granted
+    </Files>
+  </Directory>
+</VirtualHost>
+----
 ----
 
 Once again, we must set a special SELinux boolean to allow mod_authnz_pam to work:
@@ -359,6 +452,54 @@ sudo setsebool -P allow_httpd_mod_auth_pam 1
 ----
 
 Restart Apache and try and perform the same curl request again as alice. Everything should work as before because alice is a member of the sysadmin group. What happens when you are authenticated as bob instead?
+
+[source,bash]
+----
+kinit alice
+
+curl -u : --negotiate http://idmclient2.example.local/
+----
+
+----
+LOGGED IN AS: alice@EXAMPLE.LOCAL
+
+REMOTE_* REQUEST VARIABLES:
+
+  REMOTE_USER: alice@EXAMPLE.LOCAL
+  REMOTE_USER_GROUP_1: ipausers
+  REMOTE_USER_GROUP_2: sysadmins
+  REMOTE_USER_GROUP_3: ipausers
+  REMOTE_USER_GROUP_N: 3
+  REMOTE_USER_FIRSTNAME: alice
+  REMOTE_USER_LASTNAME: wonderland
+  REMOTE_USER_MAIL: alice@example.local
+  REMOTE_ADDR: 192.168.0.21
+  REMOTE_PORT: 36778
+----
+
+Before trying as bob make sure to destroy the current token using _*kdestroy -A*_
+
+[source,bash]
+----
+kinit bob
+
+curl -u : --negotiate http://idmclient2.example.local/
+----
+
+----
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>401 Unauthorized</title>
+</head><body>
+<h1>Unauthorized</h1>
+<p>This server could not verify that you
+are authorized to access the document
+requested.  Either you supplied the wrong
+credentials (e.g., bad password), or your
+browser doesn't understand how to supply
+the credentials required.</p>
+</body></html>
+----
 
 This module is now complete. 
 

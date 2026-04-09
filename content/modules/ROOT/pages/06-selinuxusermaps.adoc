@@ -57,13 +57,13 @@ Since access control to a system is defined by HBAC, it is a good administration
 This ensures that when users or hosts are added to the HBAC rule, the correct SELinux context will automatically be used.
 Sweet.
 
-Back in module 4, we created the *_sysadmin_webservers_* HBAC rule that allows members of the sysadmin User Group to have access to systems in the *_webservers_* host group.
+Back in module 4, we created the *_admins_allow_all_* HBAC rule that allows the *admins* AND the *sysadmins* user group access to any host using any service.
 We can create a new SELinux user map by using the following:
 
 [source,bash]
 ----
 ipa selinuxusermap-add sysadmin_staff_t \
-    --hbacrule sysadmin_webservers --selinuxuser staff_u:s0-s0:c0.c1023
+    --hbacrule admins_allow_all --selinuxuser staff_u:s0-s0:c0.c1023
 ----
 
 The result looks like this:
@@ -73,7 +73,7 @@ Added SELinux User Map "sysadmin_staff_t"
 -----------------------------------------
   Rule name: sysadmin_staff_t
   SELinux User: staff_u:s0-s0:c0.c1023
-  HBAC Rule: sysadmin_webservers
+  HBAC Rule: admins_allow_all
   Enabled: TRUE
 ----
 
@@ -131,39 +131,43 @@ We need to update the sudo rule to change the SELinux context using the followin
 
 [source,bash]
 ----
-ipa sudorule-add-option sysadmin_sudo --sudooption type=unconfined_t
+ipa sudorule-add-option sysadmins_allow_all_production --sudooption type=unconfined_t
 ----
 
 The result of the previous command should look like:
 ----
--------------------------------------------------------------
-Added option "type=unconfined_t" to Sudo Rule "sysadmin_sudo"
--------------------------------------------------------------
-  Rule name: sysadmin_sudo
-  Enabled: TRUE
-  Host category: all
+------------------------------------------------------------------------------
+Added option "type=unconfined_t" to Sudo Rule "sysadmins_allow_all_production"
+------------------------------------------------------------------------------
+  Rule name: sysadmins_allow_all_production
+  Description: Allow sysadmins group root access to production servers
+  Enabled: True
   Command category: all
   RunAs User category: all
   RunAs Group category: all
+  User Groups: sysadmins
+  Host Groups: production
   Sudo Option: type=unconfined_t
 ----
 
 [source,bash]
 ----
-ipa sudorule-add-option sysadmin_sudo --sudooption role=unconfined_r
+ipa sudorule-add-option sysadmins_allow_all_production --sudooption role=unconfined_r
 ----
 
 The result of the previous command should look like:
 ----
--------------------------------------------------------------
-Added option "role=unconfined_r" to Sudo Rule "sysadmin_sudo"
--------------------------------------------------------------
-  Rule name: sysadmin_sudo
-  Enabled: TRUE
-  Host category: all
+------------------------------------------------------------------------------
+Added option "role=unconfined_r" to Sudo Rule "sysadmins_allow_all_production"
+------------------------------------------------------------------------------
+  Rule name: sysadmins_allow_all_production
+  Description: Allow sysadmins group root access to production servers
+  Enabled: True
   Command category: all
   RunAs User category: all
   RunAs Group category: all
+  User Groups: sysadmins
+  Host Groups: production
   Sudo Option: type=unconfined_t, role=unconfined_r
 ----
 
@@ -183,6 +187,8 @@ We should see:
 ----
 staff_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
 ----
+
+If you still see *_staff_u:staff_r:staff_t:s0-s0:c0.c1023_*, then restart *_sssd_* on idmclient1, and wait a couple minutes.
 
 Now lets try to modify the Message of the day again.
 

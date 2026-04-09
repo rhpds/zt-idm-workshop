@@ -100,7 +100,9 @@ We do *not* want to disable *allow_systemd-user*.
 
 Again you can choose to use the Web UI to accomplish this task or use the CLI.
 
-* create an HBAC rule named *admins_allow_all* with a discription *Administrators all access pass* that allows the *admins* AND the *sysadmins* user group access to any host using any service.
+* create an HBAC rule named *admins_allow_all* with a discription *Administrators all access pass* that allows the *admins* AND the *sysadmins* user group.
+* Host category the rule applies to: *Any Host*.
+* Service category the rule applies to: *Any Service*.
 * disable the *allow_all* rule.
 
 If you are using the CLI, you can use the ipa command to give you hints.
